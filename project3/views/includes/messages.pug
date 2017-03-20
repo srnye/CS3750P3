@@ -1,0 +1,4 @@
+!= messages()
+if errors
+    each error, i in errors
+        .alert.alert-danger #{error.msg}
