@@ -4,11 +4,11 @@ var ObjectId = schema.ObjectId;
 
 module.exports.Game = mongoose.model('Game', new schema({
     id:             ObjectId,
-    gameRoomName:   { type: String, required: '{PATH} is required.' },
-    players:        { type: Schema.Types.ObjectId, ref: 'Users'},
-    winner:         { type: String, required: '{PATH} is required.' },
-    numQuestions:   { type: Number, required: '{PATH} is required.' },
-    playersScores:  { type: Schema.Types.ObjectId, ref: 'Users' },
-    numRounds:      { type: Number, required: '{PATH} is required.' },
+    gameRoomName:   { type: String, required: true },
+    players:        [{ user:            {type: String, required: true},
+                       playerScore:     {type: Number, required: true}}],
+    winner:         { type: String, required: true },
+    numQuestions:   { type: Number, required: true },
+    numRounds:      { type: Number, required: true },
     endDateTime:    { type: Date, required: true}
-}));
+}));            
