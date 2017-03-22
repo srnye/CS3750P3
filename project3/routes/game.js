@@ -15,6 +15,13 @@ router.get('/joingame', function(req, res){
   });
 });
 
+/*GET game Enter Player page*/
+router.get('/playerName', function(req, res){
+  res.render('playerName', {
+     title: 'Please Enter Player Name'
+  })
+})
+
 // Process New Game
 router.post('/newgame', (req, res, next) => {
     const gname = req.body.gname;
