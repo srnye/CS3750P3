@@ -15,4 +15,33 @@ block content
                     label Number of Rounds (1-9)?
                     input.form-control(type='text', name='numrounds', pattern="[1-9]", placeholder='Number of rounds', required)
                 //TODO: add category checkboxes - with all feature
+                .form-group
+                    label Select Categories
+                    .checkbox
+                    label
+                        input(type='checkbox', onClick='toggle(this)')
+                        | Select All
+                    .checkbox
+                    label
+                        input(type='checkbox', name ='category', value='Definitions')
+                        | Definitions
+                    .checkbox
+                    label
+                        input(type='checkbox', name ='category', value='FamousPeople')
+                        | Famous People
+                    .checkbox
+                    label
+                        input(type='checkbox', name ='category', value='Acronyms')
+                        | Acronyms
+                    .checkbox
+                    label
+                        input(type='checkbox', name ='category', value='MovieHeadlines')
+                        | Movie Headlines
+                    .checkbox
+                    label
+                        input(type='checkbox', name ='category', value='LudicrousLaws')
+                        | Ludicrous Laws
                 button.btn.btn-primary(type='submit') Create Game
+                
+    script.
+      function toggle(source) { checkboxes = document.getElementsByName('category'); for(var i=0, n=checkboxes.length;i<n;i++) {checkboxes[i].checked = source.checked;} };
