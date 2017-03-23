@@ -3,7 +3,6 @@ var schema = mongoose.Schema;
 var ObjectId = schema.ObjectId;
 
 module.exports.Game = mongoose.model('Game', new schema({
-    id:             ObjectId,
     gameRoomName:   { type: String, required: true },
     players:        [{ user:            {type: String, required: true},
                        playerScore:     {type: Number, required: true}}],
