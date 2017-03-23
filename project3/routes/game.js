@@ -8,6 +8,13 @@ router.get('/newgame', function(req, res){
   });
 });
 
+/* GET game creation page */
+router.get('/', function(req, res){
+  res.render('game', {
+    title: 'Game'
+  });
+
+});
 /* GET game joining page */
 router.get('/joingame', function(req, res){
   res.render('joingame', {
@@ -46,7 +53,7 @@ router.post('/newgame', (req, res, next) => {
     } else {
         //TODO: create new game db schema?
         //TODO: add game to game collection?
-        res.redirect('/'); //debug - redirect to game
+        res.redirect('/game'); //debug - redirect to game
     }
 });
 

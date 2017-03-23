@@ -14,12 +14,17 @@ var http = require('http');
 
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
+console.log('Your application is running on http://localhost:' + port);
 
 /**
  * Create HTTP server.
  */
 
 var server = http.createServer(app);
+
+//starting server
+var io = require('socket.io')(server);
+require('../routes/server')(io);
 
 /**
  * Listen on provided port, on all network interfaces.
