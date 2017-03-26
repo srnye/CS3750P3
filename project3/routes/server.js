@@ -1,6 +1,6 @@
 module.exports = function(io) {
 // var questionsRemaining = questions;
-// var players = [];
+var players = [];
 // var answers = [];
 // var current = [];
 // var choices = [];
@@ -9,13 +9,15 @@ module.exports = function(io) {
 // var currentQuestion = null;
 
 io.on('connection', function(socket) {
-    // player = {
-    //     score: 0
-    // };
+    var player = addPlayer();
+
     console.log('a user connected');
+    
+    //user disconnects
     socket.on('disconnect', function() {
         console.log('user disconnected');
     });
+
     socket.on('run', function(boolean) {
         if(boolean && !running) {
             console.log('Starting...');
@@ -26,11 +28,14 @@ io.on('connection', function(socket) {
             io.emit('run', boolean);
         }
     });
+
     socket.on('state', function(state) {
         if(state == "newCycle") {
             stateWriteAnswer()
         }
     });
+
+    //user joins game
     socket.on('join', function(name) {
         if(searchPlayer(name) > -1) {
             console.log(name + " has rejoined!");
@@ -42,6 +47,7 @@ io.on('connection', function(socket) {
         }
         io.emit('players', players);
     });
+
     socket.on('addAnswer', function(obj) {
         io.emit("playerReady", obj.player);
         answers.push(obj);
@@ -49,6 +55,20 @@ io.on('connection', function(socket) {
     });
 });
 
+//----------------- FUNCTIONS -----------------
+
+//function to add new user
+var addPlayer = function()
+{
+    var player = 
+    {
+        username,
+        score
+    }
+
+    players.push(player);
+    return player;
+}
 function newGame() {
     io.emit("gameStatus", "waitPlayers");
     setTimeout(function() {
