@@ -1,6 +1,13 @@
 var express = require('express');
 var router = express.Router();
 
+//variables to be set from new game
+var gameName;
+var numPlayers;
+var numRounds;
+var playerName;
+var cats;
+
 /* GET game creation page */
 router.get('/newgame', function(req, res){
   res.render('newgame', {
@@ -8,10 +15,15 @@ router.get('/newgame', function(req, res){
   });
 });
 
-/* GET game creation page */
+/* GET game page */
 router.get('/', function(req, res){
   res.render('game', {
-    title: 'Game'
+    title: 'Game',
+    gameName: gameName,
+    numPlayers: numPlayers,
+    numRounds: numRounds,
+    playerName: playerName,
+    categories: cats
   });
 
 });
@@ -48,7 +60,14 @@ router.post('/newgame', (req, res, next) => {
         });
     } else {
       //TODO: create new game socket with information
-        res.redirect('/game'); //redirect to game
+
+      gameName = gname;
+      numPlayers = numplayers;
+      numRounds = numrounds;
+      cats = categories;
+      playerName = playername;
+
+      res.redirect('/game'); //redirect to game
     }
 });
 

@@ -2,6 +2,12 @@ extends layout
 
 block content
   h1= title
+  input(type='hidden' id='gameName' value=gameName)
+  input(type='hidden' id='numPlayers' value=numPlayers)
+  input(type='hidden' id='numRounds' value=numRounds)
+  input(type='hidden' id='playerName' value=playerName)
+  input(type='hidden' id='categories' value=categories)
 
   block scripts
-    script(src='../js/game.js', type='text/javascript')
+    script(src='../js/main.js', type='text/javascript')
+    script(src='http://localhost:3000/socket.io/socket.io.js')
