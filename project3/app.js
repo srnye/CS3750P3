@@ -16,6 +16,9 @@ var questions = require('./routes/questions');
 
 var app = express();
 
+
+//mongoose.connect('mongodb://localhost:3000/game');
+const db = mongoose.connection;
 // mongoose setup
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/Balderdash');
