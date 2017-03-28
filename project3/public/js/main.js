@@ -1,5 +1,5 @@
-window.onload = function() {
-
+window.onload = function() 
+{
     var messages = [];
     var socket = io.connect('http://localhost:3000');
     // var field = document.getElementById("chat-text");
@@ -12,6 +12,7 @@ window.onload = function() {
     var numRounds = document.getElementById("numRounds");
     var playerName = document.getElementById("playerName");
     var categories = document.getElementById("categories");
+    var isNewGame = document.getElementById("isNewGame");
     // Client side variables
     //field.focus();
     //var user;
@@ -19,50 +20,11 @@ window.onload = function() {
     socket.emit('join', 
     { 
         gameName: gameName.value,
-        numPlayers: numPlayers.value,
-        numRounds: numRounds.value,
+        numPlayers: parseInt(numPlayers.value),
+        numRounds: parseInt(numRounds.value),
         playerName: playerName.value,
-        categories: categories.value
-    });
+        categories: categories.value,
+        isNewGame: isNewGame.value
+    });  
 
-    //socket.on('disconnect', console.warn.bind(console,socket));
-    //socket.emit('send',{username: 'bob'})
-    socket.on('message', function (data) {
-        if(data.message) {
-            messages.push(data);
-            var html = '';
-            for(var i=0; i<messages.length; i++) {
-                html += "<strong>" + (messages[i].username ? messages[i].username : 'Server') + ': </strong>';
-                html += messages[i].message + '<br /><hr />';
-                user = messages[i].username;
-            }
-            chat.innerHTML = html;
-        } else {
-            console.log("There is a problem:", data);
-        }
-    });    
-
-    sendButton.onclick = function() {
-            var text = field.value;
-            socket.emit('send', { message: text, username: name.value });
-            //socket.emit('send', { message: text });
-            field.value = "";
-            field.focus();
-            
-            scrollToBottom();
-    }
-        //what is this? -danny
-    //socket.emit('send', { message: field.value });
-};
-
-function scrollToBottom() {
-    document.getElementById('chat-messages').scrollTop += 1000000;
-}
-
-document.getElementById('chat-text')
-    .addEventListener('keypress', function(event) {
-        if (event.keyCode == 13) {
-            event.preventDefault();
-            document.getElementById('send').click();
-        }
-});
+}; //end on load

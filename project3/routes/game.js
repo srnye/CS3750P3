@@ -7,6 +7,7 @@ var numPlayers;
 var numRounds;
 var playerName;
 var cats;
+var isNewGame = "false";
 
 /* GET game creation page */
 router.get('/newgame', function(req, res){
@@ -23,7 +24,8 @@ router.get('/', function(req, res){
     numPlayers: numPlayers,
     numRounds: numRounds,
     playerName: playerName,
-    categories: cats
+    categories: cats,
+    isNewGame: isNewGame
   });
 
 });
@@ -66,6 +68,7 @@ router.post('/newgame', (req, res, next) => {
       numRounds = numrounds;
       cats = categories;
       playerName = playername;
+      isNewGame = "true";
 
       res.redirect('/game'); //redirect to game
     }

@@ -1,7 +1,8 @@
 module.exports = function(io) {
 // var questionsRemaining = questions;
 //var players = [];
-var games = [];
+//var games = [];
+var games = {};
 // var answers = [];
 // var current = [];
 // var choices = [];
@@ -18,58 +19,40 @@ io.on('connection', function(socket) {
         console.log('user disconnected');
     });
 
-    socket.on('run', function(boolean) {
-        if(boolean && !running) {
-            console.log('Starting...');
-            io.emit('run', boolean);
-            newGame();
-        } else if (!boolean && running) {
-            console.log('Stopping...');
-            io.emit('run', boolean);
-        }
-    });
-
-    socket.on('state', function(state) {
-        if(state == "newCycle") {
-            stateWriteAnswer()
-        }
-    });
-
-    //user joins game
+    //user joins or creates game
     socket.on('join', function(obj) 
     {
-        //console.log(obj.gameName+obj.numPlayers+obj.numRounds+obj.playerName + obj.categories);
-        // if(searchPlayer(name) > -1) {
-        //     console.log(name + " has rejoined!");
-        // } else {
-        //     player.name = name;
-        //     players.push(player);
-        //     console.log(name + " has joined!");
-        //     io.emit('newPlayer', player);
-        // }
-        // io.emit('players', players);
         socket.join(obj.gameName);
         //TODO: determine if joining room or creating room
-        var game = 
+        if (obj.isNewGame == "true")
+        {
+            var game = 
             {
-                gameName: obj.gameName,
+                //gameName: obj.gameName,
                 numPlayers: obj.numPlayers,
                 numRounds: obj.numRounds,
-                playerName: obj.playerName,
                 categories: obj.categories,
                 players: []
             }
-        games.push(obj.gameName);
+            game.players.push(obj.playerName);
+            //games.push(game);
+            games[obj.gameName] = game;
+        }
+        else
+        {
+            for (var key in games)
+            {
+                if(gameID == key)
+                {
+                    var game = games[key];
+                    game.players.push(obj.playerName);
+                }
+            }
+        }
         if (io.sockets.adapter.sids[socket.id][obj.gameName] == true)
         {
             console.log("Youre in the room");
         }
-    });
-
-    socket.on('addAnswer', function(obj) {
-        io.emit("playerReady", obj.player);
-        answers.push(obj);
-        console.log("Player " + obj.player + " added answer: " + obj.answer);
     });
 });
 
