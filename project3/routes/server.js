@@ -10,7 +10,7 @@ var games = {};
 // var currentState = "";
 // var currentQuestion = null;
 
-io.on('connection', function(socket) {
+io.sockets.on('connection', function(socket) {
 
     console.log('a user connected');
     
@@ -42,7 +42,7 @@ io.on('connection', function(socket) {
         {
             for (var key in games)
             {
-                if(gameID == key)
+                if(obj.gameName == key)
                 {
                     var game = games[key];
                     game.players.push(obj.playerName);
@@ -53,6 +53,12 @@ io.on('connection', function(socket) {
         {
             console.log("Youre in the room");
         }
+    });
+
+    socket.on('getActiveGames', (callback) =>
+    {
+        console.log("received emit on server");
+        io.to(socket.id).emit('activeGames', games); 
     });
 });
 

@@ -74,4 +74,29 @@ router.post('/newgame', (req, res, next) => {
     }
 });
 
+// Process Join Game
+router.post('/joingame', (req, res, next) => 
+{
+  const gname = req.body.gname;
+  const playername = req.body.playername;
+  let errors = req.validationErrors();
+
+  if (errors) {
+      res.render('joingame', {
+          errors: errors
+      });
+  } else {
+    //TODO: create new game socket with information
+
+    gameName = gname;
+    numPlayers = null;
+    numRounds = null;
+    cats = null;
+    playerName = playername;
+    isNewGame = "false";
+
+    res.redirect('/game'); //redirect to game
+  }
+});
+
 module.exports = router;
