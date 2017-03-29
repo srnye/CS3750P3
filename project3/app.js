@@ -13,6 +13,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var game = require('./routes/game');
 var questions = require('./routes/questions');
+var manage = require('./routes/manage');
 
 var app = express();
 
@@ -76,6 +77,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/game', game);
 app.use('/questions', questions);
+app.use('/manage', questions);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
