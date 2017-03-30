@@ -30,7 +30,7 @@ io.sockets.on('connection', function(socket) {
             {
                 //gameName: obj.gameName,
                 numPlayers: obj.numPlayers,
-                numRounds: obj.numRounds,
+                numQPR: obj.numQPR,
                 categories: obj.categories,
                 players: []
             }
