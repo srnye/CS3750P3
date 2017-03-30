@@ -1,6 +1,8 @@
 module.exports = function(io) {
 // var questionsRemaining = questions;
-// var players = [];
+//var players = [];
+//var games = [];
+var games = {};
 // var answers = [];
 // var current = [];
 // var choices = [];
@@ -8,46 +10,59 @@ module.exports = function(io) {
 // var currentState = "";
 // var currentQuestion = null;
 
-io.on('connection', function(socket) {
-    // player = {
-    //     score: 0
-    // };
+io.sockets.on('connection', function(socket) {
+
     console.log('a user connected');
+    
+    //user disconnects
     socket.on('disconnect', function() {
         console.log('user disconnected');
     });
-    socket.on('run', function(boolean) {
-        if(boolean && !running) {
-            console.log('Starting...');
-            io.emit('run', boolean);
-            newGame();
-        } else if (!boolean && running) {
-            console.log('Stopping...');
-            io.emit('run', boolean);
+
+    //user joins or creates game
+    socket.on('join', function(obj) 
+    {
+        socket.join(obj.gameName);
+        //TODO: determine if joining room or creating room
+        if (obj.isNewGame == "true")
+        {
+            var game = 
+            {
+                //gameName: obj.gameName,
+                numPlayers: obj.numPlayers,
+                numRounds: obj.numRounds,
+                categories: obj.categories,
+                players: []
+            }
+            game.players.push(obj.playerName);
+            //games.push(game);
+            games[obj.gameName] = game;
+        }
+        else
+        {
+            for (var key in games)
+            {
+                if(obj.gameName == key)
+                {
+                    var game = games[key];
+                    game.players.push(obj.playerName);
+                }
+            }
+        }
+        if (io.sockets.adapter.sids[socket.id][obj.gameName] == true)
+        {
+            console.log("Youre in the room");
         }
     });
-    socket.on('state', function(state) {
-        if(state == "newCycle") {
-            stateWriteAnswer()
-        }
-    });
-    socket.on('join', function(name) {
-        if(searchPlayer(name) > -1) {
-            console.log(name + " has rejoined!");
-        } else {
-            player.name = name;
-            players.push(player);
-            console.log(name + " has joined!");
-            io.emit('newPlayer', player);
-        }
-        io.emit('players', players);
-    });
-    socket.on('addAnswer', function(obj) {
-        io.emit("playerReady", obj.player);
-        answers.push(obj);
-        console.log("Player " + obj.player + " added answer: " + obj.answer);
+
+    socket.on('getActiveGames', (callback) =>
+    {
+        console.log("received emit on server");
+        io.to(socket.id).emit('activeGames', games); 
     });
 });
+
+//----------------- FUNCTIONS -----------------
 
 function newGame() {
     io.emit("gameStatus", "waitPlayers");

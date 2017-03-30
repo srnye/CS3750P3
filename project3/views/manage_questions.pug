@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  .container
+    h1 #{title}
+    table(class='table table-striped')
+      tr
+        th Question
+        th Answer
+        th
+      each question, i in questions
+        tr
+          td #{question.question}
+          td #{question.answer}
+          td
+            a(class="btn btn-tiny btn-default" href='/manage/questions/edit/'+question._id) Edit
+    a.btn.btn-primary(href='/manage/questions/add') Add Question

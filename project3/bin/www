@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+mongodb://localhost/testmongodb://localhost/test#!/usr/bin/env node
 
 /**
  * Module dependencies.
@@ -7,6 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('project3:server');
 var http = require('http');
+var socket = require('socket.io');
+var socketController = require('../routes/server');
 
 /**
  * Get port from environment and store in Express.
@@ -21,10 +23,9 @@ console.log('Your application is running on http://localhost:' + port);
  */
 
 var server = http.createServer(app);
+var io = socket(server);
 
-//starting server
-var io = require('socket.io')(server);
-require('../routes/server')(io);
+socketController(io);
 
 /**
  * Listen on provided port, on all network interfaces.
