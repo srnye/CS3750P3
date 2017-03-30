@@ -77,7 +77,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/game', game);
 app.use('/questions', questions);
-app.use('/manage', questions);
+app.use('/manage', manage);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

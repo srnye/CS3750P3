@@ -1,0 +1,34 @@
+extends layout
+
+block content
+  .container
+    h1 #{title}
+    form(method='post', action='/questions/edit/'+question._id)
+      .form-group
+        //div #{question.category}
+        label Category:
+        select#categoryType.form-control(name='category')
+            option(value='Definitions') Definitions
+            option(value='Famous People') Famous People
+            option(value='Acronyms') Acronyms
+            option(value='Movie Headlines') Movie Headlines
+            option(value='Ludricous Laws') Ludicrous Laws
+      .form-group
+        label Question:
+        input.form-control(name='question', type='text', value=question.question, required)
+      .form-group
+        label Answer:
+        textarea.form-control(name='answer', required) #{question.answer}
+      input.btn.btn-primary(type='submit', name = 'submit', value='Save')
+      a.btn.btn-danger(href='/manage/questions') Back
+
+  script.
+    var categoryType = document.getElementById('categoryType');
+    var cats = ["Movies", "People", "Dates", "Words", "Laws"];
+    var cOptions = document.getElementById('categoryType').options;
+    for (i=0; i < cOptions.length; i++) {
+      var a = cOptions;
+      if (cOptions[i].value == '#{question.category}'){
+        cOptions[i].selected = true;
+      }
+    }
