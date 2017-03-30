@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+mongodb://localhost/testmongodb://localhost/test#!/usr/bin/env node
 
 /**
  * Module dependencies.
