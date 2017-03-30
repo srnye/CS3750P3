@@ -74,6 +74,12 @@ window.onload = function()
             return;
         }
         //check to see if room is full
+        if (activeGames[gameName.value].players.length == activeGames[gameName.value].numPlayers)
+        {
+            warningMsg.style.display = 'block';
+            warningMsg.innerHTML = "<strong>Room is full!</strong>";
+            return;
+        }
         joinForm.submit();
     };
 
