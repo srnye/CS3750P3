@@ -5,7 +5,7 @@ window.onload = function()
     // Passed in variables from game creation
     var gameName = document.getElementById("gameName");
     var numPlayers = document.getElementById("numPlayers");
-    var numRounds = document.getElementById("numRounds");
+    var numQPR = document.getElementById("numQPR");
     var playerName = document.getElementById("playerName");
     var categories = document.getElementById("categories");
     var isNewGame = document.getElementById("isNewGame");
@@ -16,7 +16,7 @@ window.onload = function()
     { 
         gameName: gameName.value,
         numPlayers: parseInt(numPlayers.value),
-        numRounds: parseInt(numRounds.value),
+        numQPR: parseInt(numQPR.value),
         playerName: playerName.value,
         categories: categories.value,
         isNewGame: isNewGame.value

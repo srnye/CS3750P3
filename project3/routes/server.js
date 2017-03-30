@@ -1,21 +1,16 @@
-module.exports = function(io) {
-// var questionsRemaining = questions;
-//var players = [];
-//var games = [];
+module.exports = function(io) 
+{
+
+// Global dictionary to hold all game information - FORMAT {KEY (game name) : VALUE (game object with all variables needed)}
 var games = {};
-// var answers = [];
-// var current = [];
-// var choices = [];
-// var running = false;
-// var currentState = "";
-// var currentQuestion = null;
 
-io.sockets.on('connection', function(socket) {
-
+io.sockets.on('connection', function(socket) 
+{
     console.log('a user connected');
     
     //user disconnects
-    socket.on('disconnect', function() {
+    socket.on('disconnect', function() 
+    {
         console.log('user disconnected');
     });
 
@@ -30,7 +25,7 @@ io.sockets.on('connection', function(socket) {
             {
                 //gameName: obj.gameName,
                 numPlayers: obj.numPlayers,
-                numRounds: obj.numRounds,
+                numQPR: obj.numQPR,
                 categories: obj.categories,
                 players: []
             }
@@ -64,50 +59,8 @@ io.sockets.on('connection', function(socket) {
 
 //----------------- FUNCTIONS -----------------
 
-function newGame() {
-    io.emit("gameStatus", "waitPlayers");
-    setTimeout(function() {
-        stateWriteAnswer();
-    }, 10000)
-}
-
-function stateWriteAnswer() {
-    if (currentState != "writeAnswer") {
-        currentState = "writeAnswer";
-        var questionIndex = randomInt(0, questionsRemaining.length - 1);
-        currentQuestion = questionsRemaining[questionIndex];
-        questionsRemaining.splice(questionIndex, 1);
-        console.log(currentQuestion.text);
-        io.emit("gameStatus", "writeAnswer");
-        io.emit("question", currentQuestion);
-        setTimeout(function () {
-            stateGuessAnswer()
-        }, 10000)
-    }
-}
-
-function stateGuessAnswer() {
-    if (currentState != "guessAnswer") {
-        currentState = "guessAnswer";
-        io.emit("gameStatus", "guessAnswer");
-        console.log("Try to guess!");
-        answers.push({answer: currentQuestion.answer});
-        io.emit("answers", answers);
-        setTimeout(function () {
-            stateEndCycle()
-        }, 10000)
-    }
-}
-
-function stateEndCycle() {
-    if (currentState != "endCycle") {
-        console.log("Ending cycle!");
-        currentState = "endCycle";
-        io.emit("gameStatus", "endCycle");
-    }
-}
-
-function searchPlayer(name) {
+function searchPlayer(name) 
+{
     for(var i = 0; i < players.length; i++) {
         if(players[i].name == name) {
             return i
@@ -116,11 +69,9 @@ function searchPlayer(name) {
     return -1
 }
 
-function randomInt (low, high) {
+function randomInt (low, high) 
+{
     return Math.floor(Math.random() * (high - low) + low);
 }
 
-// http.listen(3000, function(){
-//     console.log('listening on *:3000');
-// });
 }

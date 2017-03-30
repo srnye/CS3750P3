@@ -4,7 +4,7 @@ var router = express.Router();
 //variables to be set from new game
 var gameName;
 var numPlayers;
-var numRounds;
+var numQPR; //number of questions per round
 var playerName;
 var cats;
 var isNewGame = "false";
@@ -22,7 +22,7 @@ router.get('/', function(req, res){
     title: 'Game',
     gameName: gameName,
     numPlayers: numPlayers,
-    numRounds: numRounds,
+    numQPR: numQPR,
     playerName: playerName,
     categories: cats,
     isNewGame: isNewGame
@@ -47,7 +47,7 @@ router.get('/playerName', function(req, res){
 router.post('/newgame', (req, res, next) => {
     const gname = req.body.gname;
     const numplayers = req.body.numplayers;
-    const numrounds = req.body.numrounds;
+    const numqpr = req.body.numqpr;
     const categories = req.body.category;
     const playername = req.body.playername;
 
@@ -65,7 +65,7 @@ router.post('/newgame', (req, res, next) => {
 
       gameName = gname;
       numPlayers = numplayers;
-      numRounds = numrounds;
+      numQPR = numqpr;
       cats = categories;
       playerName = playername;
       isNewGame = "true";
@@ -90,7 +90,7 @@ router.post('/joingame', (req, res, next) =>
 
     gameName = gname;
     numPlayers = null;
-    numRounds = null;
+    numQPR = null;
     cats = null;
     playerName = playername;
     isNewGame = "false";
