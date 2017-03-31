@@ -6,14 +6,14 @@ block content
     include ./includes/messages.pug
     form(method='post', action='/game/newgame')
                 .form-group
-                    label Game Name
+                    label Game name:
                     input.form-control(type='text', name='gname', placeholder='Game name', required)
                 .form-group
-                    label Number of Players (4-9)?
-                    input.form-control(type='text', name='numplayers', pattern="[4-9]", placeholder='Number of players', required)
+                    label Number of players (2-6):
+                    input.form-control(type='text', name='numplayers', pattern="[2-6]", placeholder='Number of players', required)
                 .form-group
-                    label Number of Rounds (1-9)?
-                    input.form-control(type='text', name='numrounds', pattern="[1-9]", placeholder='Number of rounds', required)
+                    label Number of questions per round (1-9):
+                    input.form-control(type='text', name='numqpr', pattern="[1-9]", placeholder='Number of questions per round', required)
                 .form-group
                     label What is your name?
                     input.form-control(type='text', name='playername', placeholder='Player Name', required)

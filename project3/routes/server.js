@@ -1,21 +1,16 @@
-module.exports = function(io) {
-// var questionsRemaining = questions;
-//var players = [];
-//var games = [];
+module.exports = function(io) 
+{
+
+// Global dictionary to hold all game information - FORMAT {KEY (game name) : VALUE (game object with all variables needed)}
 var games = {};
-// var answers = [];
-// var current = [];
-// var choices = [];
-// var running = false;
-// var currentState = "";
-// var currentQuestion = null;
 
-io.sockets.on('connection', function(socket) {
-
+io.sockets.on('connection', function(socket) 
+{
     console.log('a user connected');
     
     //user disconnects
-    socket.on('disconnect', function() {
+    socket.on('disconnect', function() 
+    {
         console.log('user disconnected');
     });
 
@@ -23,19 +18,22 @@ io.sockets.on('connection', function(socket) {
     socket.on('join', function(obj) 
     {
         socket.join(obj.gameName);
-        //TODO: determine if joining room or creating room
+        // determine if joining room or creating room
         if (obj.isNewGame == "true")
         {
             var game = 
             {
                 //gameName: obj.gameName,
                 numPlayers: obj.numPlayers,
-                numRounds: obj.numRounds,
+                numQPR: obj.numQPR,
                 categories: obj.categories,
-                players: []
-            }
-            game.players.push(obj.playerName);
-            //games.push(game);
+                players: [],
+                currentHost: {},
+                roundsPlayed: 0,
+            };
+
+            var player = {name: obj.playerName, score: 0, socketID: socket.id};
+            game.players.push(player);
             games[obj.gameName] = game;
         }
         else
@@ -45,13 +43,39 @@ io.sockets.on('connection', function(socket) {
                 if(obj.gameName == key)
                 {
                     var game = games[key];
-                    game.players.push(obj.playerName);
+                    var player = {name: obj.playerName, score: 0, socketID: socket.id};
+                    game.players.push(player);
                 }
             }
         }
         if (io.sockets.adapter.sids[socket.id][obj.gameName] == true)
         {
-            console.log("Youre in the room");
+            console.log("Youre in room: " + obj.gameName);
+        }
+        //send back player join information
+        //check if all players have joined
+        if (games[obj.gameName].players.length == games[obj.gameName].numPlayers)
+        {
+            //TODO: start game
+            //set currentHost
+            var host = {name: games[obj.gameName].players[0].name, socketID: games[obj.gameName].players[0].socketID};
+            games[obj.gameName].currentHost = host;
+            //have other players wait
+            io.in(obj.gameName).emit('waitForHost');
+            //TODO: have host pick question
+        }
+        //if not, update waiting lobby
+        else
+        {
+            var playerArr = [];
+            for(var p in games[obj.gameName].players)
+            {
+                playerArr.push(games[obj.gameName].players[p].name);
+            }
+            io.in(obj.gameName).emit('playerJoined', 
+            {
+                players: playerArr
+            });
         }
     });
 
@@ -64,50 +88,8 @@ io.sockets.on('connection', function(socket) {
 
 //----------------- FUNCTIONS -----------------
 
-function newGame() {
-    io.emit("gameStatus", "waitPlayers");
-    setTimeout(function() {
-        stateWriteAnswer();
-    }, 10000)
-}
-
-function stateWriteAnswer() {
-    if (currentState != "writeAnswer") {
-        currentState = "writeAnswer";
-        var questionIndex = randomInt(0, questionsRemaining.length - 1);
-        currentQuestion = questionsRemaining[questionIndex];
-        questionsRemaining.splice(questionIndex, 1);
-        console.log(currentQuestion.text);
-        io.emit("gameStatus", "writeAnswer");
-        io.emit("question", currentQuestion);
-        setTimeout(function () {
-            stateGuessAnswer()
-        }, 10000)
-    }
-}
-
-function stateGuessAnswer() {
-    if (currentState != "guessAnswer") {
-        currentState = "guessAnswer";
-        io.emit("gameStatus", "guessAnswer");
-        console.log("Try to guess!");
-        answers.push({answer: currentQuestion.answer});
-        io.emit("answers", answers);
-        setTimeout(function () {
-            stateEndCycle()
-        }, 10000)
-    }
-}
-
-function stateEndCycle() {
-    if (currentState != "endCycle") {
-        console.log("Ending cycle!");
-        currentState = "endCycle";
-        io.emit("gameStatus", "endCycle");
-    }
-}
-
-function searchPlayer(name) {
+function searchPlayer(name) 
+{
     for(var i = 0; i < players.length; i++) {
         if(players[i].name == name) {
             return i
@@ -116,11 +98,9 @@ function searchPlayer(name) {
     return -1
 }
 
-function randomInt (low, high) {
+function randomInt (low, high) 
+{
     return Math.floor(Math.random() * (high - low) + low);
 }
 
-// http.listen(3000, function(){
-//     console.log('listening on *:3000');
-// });
 }
