@@ -18,7 +18,7 @@ io.sockets.on('connection', function(socket)
     socket.on('join', function(obj) 
     {
         socket.join(obj.gameName);
-        //TODO: determine if joining room or creating room
+        // determine if joining room or creating room
         if (obj.isNewGame == "true")
         {
             var game = 
@@ -46,7 +46,21 @@ io.sockets.on('connection', function(socket)
         }
         if (io.sockets.adapter.sids[socket.id][obj.gameName] == true)
         {
-            console.log("Youre in the room");
+            console.log("Youre in room: " + obj.gameName);
+        }
+        //send back player join information
+        //check if all players have joined
+        if (games[obj.gameName].players.length == games[obj.gameName].numPlayers)
+        {
+            //TODO: start game
+        }
+        //if not, update waiting lobby
+        else
+        {
+            io.in(obj.gameName).emit('playerJoined', 
+            {
+                players: games[obj.gameName].players
+            });
         }
     });
 

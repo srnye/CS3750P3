@@ -79,6 +79,9 @@ router.post('/joingame', (req, res, next) =>
 {
   const gname = req.body.gname;
   const playername = req.body.playername;
+  const numplayers = req.body.numPlayers;
+  const numqpr = req.body.numQPR;
+  const categories = req.body.categories;
   let errors = req.validationErrors();
 
   if (errors) {
@@ -89,9 +92,9 @@ router.post('/joingame', (req, res, next) =>
     //TODO: create new game socket with information
 
     gameName = gname;
-    numPlayers = null;
-    numQPR = null;
-    cats = null;
+    numPlayers = numplayers;
+    numQPR = numqpr;
+    cats = categories;
     playerName = playername;
     isNewGame = "false";
 

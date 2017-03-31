@@ -5,6 +5,9 @@ block content
   include ./includes/messages.pug
   #warningMsg.alert.alert-warning
   form(method='post', action='/game/joingame', id='joinForm')
+    input(type='hidden' id='numPlayers' name='numPlayers')
+    input(type='hidden' id='numQPR' name='numQPR')
+    input(type='hidden' id='categories' name='categories')
     .form-group
       label What is your name?
       input.form-control(type='text', name='playername', placeholder='Player Name', required, id='userName')
