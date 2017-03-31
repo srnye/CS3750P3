@@ -1,13 +1,30 @@
 extends layout
 
 block content
-  h1= title
+  //h1= title
   input(type='hidden' id='gameName' value=gameName)
   input(type='hidden' id='numPlayers' value=numPlayers)
   input(type='hidden' id='numQPR' value=numQPR)
   input(type='hidden' id='playerName' value=playerName)
   input(type='hidden' id='categories' value=categories)
   input(type='hidden' id='isNewGame' value=isNewGame)
+
+  //initial waiting lobby
+  #waitingDiv.container
+  h1 Game Name: #{gameName}
+  h4 Expected Players: #{numPlayers}
+  p The game will start when all players join.
+  table#waitingTable.table
+    thead
+      tr
+        th #
+        th Player
+    tbody
+    - var n = 1;
+      while n <= numPlayers
+        tr
+          td= n++
+          td waiting...
 
   block scripts
     script(src='../js/main.js', type='text/javascript')

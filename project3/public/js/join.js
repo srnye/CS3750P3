@@ -8,6 +8,10 @@ window.onload = function()
     var warningMsg = document.getElementById('warningMsg');
     var joinForm = document.getElementById('joinForm');
 
+    var numPlayers = document.getElementById("numPlayers");
+    var numQPR = document.getElementById("numQPR");
+    var categories = document.getElementById("categories");
+
     var activeGames = {};
 
     warningMsg.style.display = 'none';
@@ -80,6 +84,9 @@ window.onload = function()
             warningMsg.innerHTML = "<strong>Room is full!</strong>";
             return;
         }
+        numPlayers.value = activeGames[gameName.value].numPlayers;
+        numQPR.value = activeGames[gameName.value].numQPR;
+        categories.value = activeGames[gameName.value].categories;
         joinForm.submit();
     };
 
