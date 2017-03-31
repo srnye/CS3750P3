@@ -27,10 +27,13 @@ io.sockets.on('connection', function(socket)
                 numPlayers: obj.numPlayers,
                 numQPR: obj.numQPR,
                 categories: obj.categories,
-                players: []
-            }
-            game.players.push(obj.playerName);
-            //games.push(game);
+                players: [],
+                currentHost: {},
+                roundsPlayed: 0,
+            };
+
+            var player = {name: obj.playerName, score: 0, socketID: socket.id};
+            game.players.push(player);
             games[obj.gameName] = game;
         }
         else
@@ -40,7 +43,8 @@ io.sockets.on('connection', function(socket)
                 if(obj.gameName == key)
                 {
                     var game = games[key];
-                    game.players.push(obj.playerName);
+                    var player = {name: obj.playerName, score: 0, socketID: socket.id};
+                    game.players.push(player);
                 }
             }
         }
@@ -53,13 +57,24 @@ io.sockets.on('connection', function(socket)
         if (games[obj.gameName].players.length == games[obj.gameName].numPlayers)
         {
             //TODO: start game
+            //set currentHost
+            var host = {name: games[obj.gameName].players[0].name, socketID: games[obj.gameName].players[0].socketID};
+            games[obj.gameName].currentHost = host;
+            //have other players wait
+            io.in(obj.gameName).emit('waitForHost');
+            //TODO: have host pick question
         }
         //if not, update waiting lobby
         else
         {
+            var playerArr = [];
+            for(var p in games[obj.gameName].players)
+            {
+                playerArr.push(games[obj.gameName].players[p].name);
+            }
             io.in(obj.gameName).emit('playerJoined', 
             {
-                players: games[obj.gameName].players
+                players: playerArr
             });
         }
     });

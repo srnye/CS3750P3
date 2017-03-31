@@ -14,6 +14,7 @@ window.onload = function()
     // Client side variables
     var waitingDiv = document.getElementById("waitingDiv");
     var waitingTable = document.getElementById("waitingTable");
+    var waitingHostLoader = document.getElementById("waitingHostLoader");
 
     socket.emit('join', 
     { 
@@ -32,6 +33,14 @@ window.onload = function()
             var c = waitingTable.rows[parseInt(p) + 1].cells;
             c[1].innerHTML = data.players[p];
         }
+    }); 
+
+    socket.on('waitForHost', function()
+    {
+        //hide lobby
+        waitingDiv.style.display = 'none';
+        //show loader
+        waitingHostLoader.style.display = 'block';
     }); 
 
 }; //end on load
