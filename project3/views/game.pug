@@ -39,6 +39,13 @@ block content
     h1(align='center') Host is picking question...
     #timer
 
+    #selectQuestion
+    .content
+    .well
+        .row
+            .col-lg-2(ng-repeat="player in players")
+                .btn.btn-block(ng-class="isReady(playerName) ? 'btn-success' : 'btn-default'") #{playerName}
+
   #writeAnswer
     .content
     .well
