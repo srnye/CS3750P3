@@ -66,9 +66,9 @@ io.sockets.on('connection', function(socket)
             //----------------- TIMER ---------------------
 
             var countdown = 60;
+            io.in(obj.gameName).emit('timer', { countdown: countdown });
             setInterval(function() {  
             countdown--;
-            io.in(obj.gameName).emit('timer', { countdown: countdown });
             }, 1000);
         
             //TODO: have host pick question

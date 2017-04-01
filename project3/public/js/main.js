@@ -47,7 +47,19 @@ window.onload = function()
     //timer
     socket.on('timer', function (data) 
     {  
-        timer.innerHTML = data.countdown;
+        timerStart();
     });
 
+    
+function timerStart() {
+    //----------------- TIMER ---------------------
+        var countdown = 60;
+        setInterval(function() {  
+        countdown--;
+        timer.innerHTML = countdown;
+        }, 1000);
+}
+
 }; //end on load
+
+
