@@ -47,13 +47,12 @@ window.onload = function()
     //timer
     socket.on('timer', function (data) 
     {  
-        timerStart();
+        timerStart(data.countdown);
     });
 
     
-function timerStart() {
+function timerStart(countdown) {
     //----------------- TIMER ---------------------
-        var countdown = 60;
         setInterval(function() {  
         countdown--;
         timer.innerHTML = countdown;
