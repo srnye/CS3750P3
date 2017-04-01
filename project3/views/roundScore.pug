@@ -1,0 +1,64 @@
+extends layout
+
+block content
+  h1
+  
+    head
+      meta(charset='utf-8')
+      meta(http-equiv='X-UA-Compatible', content='IE=edge')
+      meta(name='viewport', content='width=device-width, initial-scale=1')
+      link(href='css/bootstrap.min.css', rel='stylesheet')
+      title Bootstrap Example
+      link(rel='stylesheet', href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')
+      script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js')
+      script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
+    body
+      script(src='https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css')
+      script(src='https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js')
+
+      script(src='http://code.jquery.com/jquery.js')
+      script(src='js/bootstrap.min.js')
+      .container
+          .jumbotron
+              h1 Your Score for the Round Is...
+          table#pickle.table.table-hover.table-striped.table-bordered
+              thead
+                  tr
+                      th Name
+                      th Round Score
+                      th Current Total
+              tbody
+                  tr
+                      th(scope='row') Beth
+                      td 100
+                      td 1900
+                  tr
+                      th(scope='row') Blake
+                      td 100
+                      td 1800
+                  tr
+                      th(scope='row') Ian
+                      td 100
+                      td 1700
+                  tr
+                      th(scope='row') Steve
+                      td 100
+                      td 1600
+                  tr
+                      th(scope='row') Wes
+                      td 100
+                      td 1500
+                  tr
+                      th(scope='row') Zac
+                      td 100
+                      td 1400
+    button.btn.btn-primary(type='submit') Play Again
+
+
+  script.
+      $(document).ready(function() {
+          $('#pickle').DataTable();
+      });
+  //a.btn.btn-primary(href='/game/newgame') Create New Game
+  //a.btn.btn-primary(href='/game/joingame') Join Existing Game
+  //a.btn.btn-primary(href='/manage/questions') Manage Questions

@@ -15,6 +15,7 @@ var game = require('./routes/game');
 var questions = require('./routes/questions');
 var manage = require('./routes/manage');
 var winnerBoard = require('./routes/winnerBoard');
+var roundScore = require('./routes/roundScore');
 
 var app = express();
 
@@ -83,6 +84,7 @@ app.use('/game', game);
 app.use('/questions', questions);
 app.use('/manage', manage);
 app.use('/winnerBoard', winnerBoard);
+app.use('/roundScore', roundScore);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
