@@ -8,6 +8,9 @@ block content
   input(type='hidden' id='playerName' value=playerName)
   input(type='hidden' id='categories' value=categories)
   input(type='hidden' id='isNewGame' value=isNewGame)
+  // hidden input for question and answers?
+  input(type='hidden' id='question' value=question)
+  input(type='hidden' id='answer' value=answer)
 
   //initial waiting lobby
   #waitingDiv.container
@@ -35,6 +38,24 @@ block content
       .rect5
     h1(align='center') Host is picking question...
     #timer
+
+  #writeAnswer
+    .content
+    .well
+        h1 #{question}
+    .well
+        .row
+            .col-lg-2(ng-repeat="player in players")
+                .btn.btn-block(ng-class="isReady(playerName) ? 'btn-success' : 'btn-default'") #{playerName}
+
+  #guessAnswer
+    .content
+      .well
+          h1 #{question}
+      .well
+          .row
+              .col-lg-4(ng-repeat="answer in answers")
+                  .btn.btn-block.btn-primary #{answer}
     
 
   block scripts
