@@ -15,22 +15,22 @@ const questionSchema = mongoose.Schema({
 
 const Question = module.exports = mongoose.model('Question', questionSchema);
 
-// Get Categories
+// Get questions
 module.exports.getQuestions = function(callback, limit){
   Question.find(callback).limit(limit).sort([['title', 'ascending']]);
 }
 
-// add category
+// add question
 module.exports.addQuestion = function(question, callback){
   Question.create(question, callback);
 }
 
-// get single category by id
+// get single question by id
 module.exports.getQuestionById = function(id, callback){
   Question.findById(id, callback);
 }
 
-//update category
+//update question
 module.exports.updateQuestion = function(query, update, options, callback){
   Question.findOneAndUpdate(query, update, options, callback);
 }

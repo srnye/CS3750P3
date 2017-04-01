@@ -10,6 +10,7 @@ window.onload = function()
     var playerName = document.getElementById("playerName");
     var categories = document.getElementById("categories");
     var isNewGame = document.getElementById("isNewGame");
+    var questions = document.getElementById("questions");
     
     // Client side variables
     var waitingDiv = document.getElementById("waitingDiv");
@@ -23,7 +24,8 @@ window.onload = function()
         numQPR: parseInt(numQPR.value),
         playerName: playerName.value,
         categories: categories.value,
-        isNewGame: isNewGame.value
+        isNewGame: isNewGame.value,
+        questions: questions.value
     });
 
     socket.on('playerJoined', function(data)
@@ -41,6 +43,11 @@ window.onload = function()
         waitingDiv.style.display = 'none';
         //show loader
         waitingHostLoader.style.display = 'block';
-    }); 
+    });
+    
+    socket.on('hostScreen', function()
+    {
+        
+    });
 
 }; //end on load
