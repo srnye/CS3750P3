@@ -64,6 +64,13 @@ io.sockets.on('connection', function(socket)
             beginRound(obj.gameName);
 
 
+            //----------------- TIMER ---------------------
+
+            var countdown = 60;
+            io.in(obj.gameName).emit('timer', { countdown: countdown });
+            setInterval(function() {  
+            countdown--;
+            }, 1000);
         }
         //if not, update waiting lobby
         else

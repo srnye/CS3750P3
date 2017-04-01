@@ -16,6 +16,7 @@ window.onload = function()
     var waitingDiv = document.getElementById("waitingDiv");
     var waitingTable = document.getElementById("waitingTable");
     var waitingHostLoader = document.getElementById("waitingHostLoader");
+    var timer = document.getElementById("timer");
 
     socket.emit('join', 
     { 
@@ -50,4 +51,21 @@ window.onload = function()
         
     });
 
+    //timer
+    socket.on('timer', function (data) 
+    {  
+        timerStart(data.countdown);
+    });
+
+    
+function timerStart(countdown) {
+    //----------------- TIMER ---------------------
+        setInterval(function() {  
+        countdown--;
+        timer.innerHTML = countdown;
+        }, 1000);
+}
+
 }; //end on load
+
+

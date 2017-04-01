@@ -35,6 +35,33 @@ block content
       .rect4
       .rect5
     h1(align='center') Host is picking question...
+    #timer
+
+    #selectQuestion
+    .content
+    .well
+        .row
+            .col-lg-2(ng-repeat="player in players")
+                .btn.btn-block(ng-class="isReady(playerName) ? 'btn-success' : 'btn-default'") #{playerName}
+
+  #writeAnswer
+    .content
+    .well
+        h1 #{question}
+    .well
+        .row
+            .col-lg-2(ng-repeat="player in players")
+                .btn.btn-block(ng-class="isReady(playerName) ? 'btn-success' : 'btn-default'") #{playerName}
+
+  #guessAnswer
+    .content
+      .well
+          h1 #{question}
+      .well
+          .row
+              .col-lg-4(ng-repeat="answer in answers")
+                  .btn.btn-block.btn-primary #{answer}
+    
 
   block scripts
     script(src='../js/main.js', type='text/javascript')
