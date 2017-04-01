@@ -62,6 +62,15 @@ io.sockets.on('connection', function(socket)
             games[obj.gameName].currentHost = host;
             //have other players wait
             io.in(obj.gameName).emit('waitForHost');
+
+            //----------------- TIMER ---------------------
+
+            var countdown = 60;
+            setInterval(function() {  
+            countdown--;
+            io.in(obj.gameName).emit('timer', { countdown: countdown });
+            }, 1000);
+        
             //TODO: have host pick question
         }
         //if not, update waiting lobby
