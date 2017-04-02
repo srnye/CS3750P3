@@ -1,18 +1,21 @@
 extends layout
 
 block content
-  h1= title
-  include ./includes/messages.pug
-  #warningMsg.alert.alert-warning
-  form(method='post', action='/game/joingame', id='joinForm')
-    .form-group
-      label What is your name?
-      input.form-control(type='text', name='playername', placeholder='Player Name', required, id='userName')
-    .form-group
-      label Game Name
-      input.form-control(type='text', name='gname', placeholder='Game name', required, id='gameName')
-  button.btn.btn-primary(type='submit', id='submitBtn', style='display: none;')
-  button.btn.btn-primary(id='joinBtn') Join Game
+  .container
+    .jumbotron
+      #joinGame
+        h1= title
+        include ./includes/messages.pug
+        #warningMsg.alert.alert-warning
+        form(method='post', action='/game/joingame', id='joinForm')
+          .form-group
+            label What is your name?
+            input.form-control(type='text', name='playername', placeholder='Player Name', required, id='userName')
+          .form-group
+            label Game Name
+            input.form-control(type='text', name='gname', placeholder='Game name', required, id='gameName')
+        button.btn.btn-primary(type='submit', id='submitBtn', style='display: none;')
+        button.btn.btn-primary(id='joinBtn') Join Game
 
 
 
