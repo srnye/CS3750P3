@@ -8,6 +8,7 @@ block content
   input(type='hidden' id='playerName' value=playerName)
   input(type='hidden' id='categories' value=categories)
   input(type='hidden' id='isNewGame' value=isNewGame)
+  input(type='hidden' id='questions' value=questions)
 
   //initial waiting lobby
   #waitingDiv.container
@@ -34,6 +35,49 @@ block content
       .rect4
       .rect5
     h1(align='center') Host is picking question...
+    #timer
+
+  #waitingAnswerLoader(style='display: none;')
+    .spinner
+      .rect1
+      .rect2
+      .rect3
+      .rect4
+      .rect5
+    h1(align='center') Waiting on other users to submit answers...
+
+  #waitingGuessesLoader(style='display: none;')
+    .spinner
+      .rect1
+      .rect2
+      .rect3
+      .rect4
+      .rect5
+    h1(align='center') Waiting on other users to guess correct answer...
+
+  #hostDiv(style='display: none;')
+    p Choose a category from the categories below:
+    #catDiv
+    #hostQDiv
+    #timerHost
+
+
+  #writeAnswerDiv(style='display: none;')
+    h2 Question:
+    h3#questionHeader
+    #warningMsg.alert.alert-warning(style='display: none;')
+    .form-group
+      label Your answer:
+      input.form-control(type='text', id='answerTxt', placeholder='Your answer')
+    button.btn.btn-primary(id='answerSubmitBtn') Submit
+
+
+  #guessAnswerDiv(style='display: none;')
+    h2 Question:
+    h3#answerGuessHeader
+    p Guess which answer you think is correct:
+    #guessDiv
+    
 
   block scripts
     script(src='../js/main.js', type='text/javascript')
