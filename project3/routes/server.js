@@ -226,6 +226,7 @@ io.sockets.on('connection', function(socket)
     {
         var questions = [];
 
+        //TODO: throws error if only one category selected
         cats = JSON.parse(cats);
         qs = JSON.parse(qs);
 

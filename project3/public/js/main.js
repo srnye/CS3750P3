@@ -159,22 +159,40 @@ window.onload = function()
         guessDiv.innerHTML = '';
         answerGuessHeader.innerHTML = data.question.question;
 
+        //i feel like the for loop is screwing up our calls. 'a' wont be defined when we call onClick right? we got away with it before since we werent using the index
         for (var a in data.answers)
         {
             var button = document.createElement("button");
             button.className = "btn btn-primary";
             button.innerHTML = data.answers[a].answer;
-            button.onclick = function()
-            {
-                alert("Answer Originator: " + data.answers[a].player + " Answer :" + data.answers[a].answer);
-                //socket.emit('answerChosen', {answer: data.answers[a], gameName: gameName.value, player: playerName.value});
-            };
 
             if (data.answers[a].player != playerName.value)
             {
+                button.onclick = function()
+                {
+                    //alert(this.innerHTML);
+
+                    //var tempAns = data.answers;
+                    //on scond thought im not sure if we need this inner loop or just the check against the button.innerhtml. talk to you about it later i guess. but it works!
+                    for (var ans in data.answers)
+                    {
+                        //alert("Answer Originator: " + data.answers[ans].player + " Answer :" + data.answers[ans].answer);
+                        if(data.answers[ans].answer == this.innerHTML)
+                        {
+                                alert("Answer Originator: " + data.answers[ans].player + " Answer :" + data.answers[ans].answer);
+                        }
+                    }
+                            
+                    
+                    //alert("Answer Originator: " + data.answers[a].answer.player + " Answer :" + data.answers[a].answer);
+                    //socket.emit('answerChosen', {answer: data.answers[a], gameName: gameName.value, player: playerName.value});
+                };
+
                 guessDiv.appendChild(button);
             }
         }
+
+        
     });
 
     socket.on('waitForGuesses', function()
