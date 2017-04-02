@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+Question = require('../models/Question.js');
+
 //variables to be set from new game
 var gameName;
 var numPlayers;
@@ -8,6 +10,7 @@ var numQPR; //number of questions per round
 var playerName;
 var cats;
 var isNewGame = "false";
+var questions = [];
 
 /* GET game creation page */
 router.get('/newgame', function(req, res){
@@ -18,14 +21,23 @@ router.get('/newgame', function(req, res){
 
 /* GET game page */
 router.get('/', function(req, res){
-  res.render('game', {
+  Question.getQuestions((err, questions) => 
+  {
+    if(err){
+      res.send(err);
+    }
+
+    res.render('game', {
     title: 'Game',
     gameName: gameName,
     numPlayers: numPlayers,
     numQPR: numQPR,
     playerName: playerName,
     categories: cats,
-    isNewGame: isNewGame
+    isNewGame: isNewGame,
+    questions: questions
+    });
+  
   });
 
 });

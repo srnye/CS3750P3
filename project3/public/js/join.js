@@ -11,6 +11,7 @@ window.onload = function()
     var numPlayers = document.getElementById("numPlayers");
     var numQPR = document.getElementById("numQPR");
     var categories = document.getElementById("categories");
+    var questions = document.getElementById("questions");
 
     var activeGames = {};
 
@@ -87,6 +88,7 @@ window.onload = function()
         numPlayers.value = activeGames[gameName.value].numPlayers;
         numQPR.value = activeGames[gameName.value].numQPR;
         categories.value = activeGames[gameName.value].categories;
+        questions.value = activeGames[gameName.value].questions;
         joinForm.submit();
     };
 
