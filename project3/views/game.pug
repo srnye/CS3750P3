@@ -37,30 +37,46 @@ block content
     h1(align='center') Host is picking question...
     #timer
 
-    #selectQuestion
-    .content
-    .well
-        .row
-            .col-lg-2(ng-repeat="player in players")
-                .btn.btn-block(ng-class="isReady(playerName) ? 'btn-success' : 'btn-default'") #{playerName}
+  #waitingAnswerLoader(style='display: none;')
+    .spinner
+      .rect1
+      .rect2
+      .rect3
+      .rect4
+      .rect5
+    h1(align='center') Waiting on other users to submit answers...
 
-  #writeAnswer
-    .content
-    .well
-        h1 #{question}
-    .well
-        .row
-            .col-lg-2(ng-repeat="player in players")
-                .btn.btn-block(ng-class="isReady(playerName) ? 'btn-success' : 'btn-default'") #{playerName}
+  #waitingGuessesLoader(style='display: none;')
+    .spinner
+      .rect1
+      .rect2
+      .rect3
+      .rect4
+      .rect5
+    h1(align='center') Waiting on other users to guess correct answer...
 
-  #guessAnswer
-    .content
-      .well
-          h1 #{question}
-      .well
-          .row
-              .col-lg-4(ng-repeat="answer in answers")
-                  .btn.btn-block.btn-primary #{answer}
+  #hostDiv(style='display: none;')
+    p Choose a category from the categories below:
+    #catDiv
+    #hostQDiv
+    #timerHost
+
+
+  #writeAnswerDiv(style='display: none;')
+    h2 Question:
+    h3#questionHeader
+    #warningMsg.alert.alert-warning(style='display: none;')
+    .form-group
+      label Your answer:
+      input.form-control(type='text', id='answerTxt', placeholder='Your answer')
+    button.btn.btn-primary(id='answerSubmitBtn') Submit
+
+
+  #guessAnswerDiv(style='display: none;')
+    h2 Question:
+    h3#answerGuessHeader
+    p Guess which answer you think is correct:
+    #guessDiv
     
 
   block scripts
