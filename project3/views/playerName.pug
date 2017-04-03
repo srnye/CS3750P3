@@ -1,8 +1,10 @@
 extends layout
 
 block content
-  h1= title
-  form(method='post', action='')
-              .form-group
-                  input.form-control(type='text', name='pname', placeholder='player name', required)
-              button.btn.btn-primary(type='submit') Submit
+    .jumbotron
+        #playerName
+         h1= title
+            form(method='post', action='')
+                 .form-group
+                     input.form-control(type='text', name='pname', placeholder='player name', required)
+                 button.btn.btn-primary(type='submit') Submit

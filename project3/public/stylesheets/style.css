@@ -23,3 +23,12 @@ a {
 #joinGame {
   text-align: left;
 }
+
+#playerName {
+  text-align: left;
+  padding-left: 25px;
+}
+
+.container-custom {
+  width: 35%;
+}

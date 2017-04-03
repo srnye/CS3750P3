@@ -1,13 +1,14 @@
 extends layout
 
 block content
-  h1= title
-  input(type='hidden' id='gameName' value=gameName)
-  input(type='hidden' id='numPlayers' value=numPlayers)
-  input(type='hidden' id='numQPR' value=numQPR)
-  input(type='hidden' id='playerName' value=playerName)
-  input(type='hidden' id='categories' value=categories)
-  input(type='hidden' id='isNewGame' value=isNewGame)
+  .jumbotron
+    h1= title
+    input(type='hidden' id='gameName' value=gameName)
+    input(type='hidden' id='numPlayers' value=numPlayers)
+    input(type='hidden' id='numQPR' value=numQPR)
+    input(type='hidden' id='playerName' value=playerName)
+    input(type='hidden' id='categories' value=categories)
+    input(type='hidden' id='isNewGame' value=isNewGame)
 
   block scripts
     script(src='../js/main.js', type='text/javascript')

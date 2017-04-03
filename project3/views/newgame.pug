@@ -6,7 +6,7 @@ block content
         #newGame
             h1= title
             include ./includes/messages.pug
-            form(method='post', action='/game/newgame')
+            form(method='post', action='/game/newgame') 
                         .form-group
                             label Game name:
                             input.form-control(type='text', name='gname', placeholder='Game name', required)
@@ -21,30 +21,40 @@ block content
                             input.form-control(type='text', name='playername', placeholder='Player Name', required)
                         .form-group
                             label Select Categories (choose at least 1)
-                            .checkbox
-                            label
-                                input(type='checkbox', onClick='toggle(this)')
-                                | Select All
-                            .checkbox
-                            label
-                                input(type='checkbox', name ='category', value='Definitions')
-                                | Definitions
-                            .checkbox
-                            label
-                                input(type='checkbox', name ='category', value='FamousPeople')
-                                | Famous People
-                            .checkbox
-                            label
-                                input(type='checkbox', name ='category', value='Acronyms')
-                                | Acronyms
-                            .checkbox
-                            label
-                                input(type='checkbox', name ='category', value='MovieHeadlines')
-                                | Movie Headlines
-                            .checkbox
-                            label
-                                input(type='checkbox', name ='category', value='LudicrousLaws')
-                                | Ludicrous Laws
+                            .container-custom
+                                .row
+                                    .col-sm-6
+                                        .checkbox
+                                        label
+                                            input(type='checkbox', onClick='toggle(this)')
+                                            | Select All
+                                    .col-sm-6
+                                        .checkbox
+                                        label
+                                            input(type='checkbox', name ='category', value='Definitions')
+                                            | Definitions      
+                                .row
+                                    .col-sm-6
+                                        .checkbox
+                                        label
+                                            input(type='checkbox', name ='category', value='FamousPeople')
+                                            | Famous People
+                                    .col-sm-6        
+                                        .checkbox
+                                        label
+                                            input(type='checkbox', name ='category', value='Acronyms')
+                                            | Acronyms        
+                                .row
+                                    .col-sm-6
+                                        .checkbox
+                                        label
+                                            input(type='checkbox', name ='category', value='MovieHeadlines')
+                                            | Movie Headlines
+                                    .col-sm-6
+                                        .checkbox
+                                        label
+                                            input(type='checkbox', name ='category', value='LudicrousLaws')
+                                            | Ludicrous Laws
                         button.btn.btn-primary(type='submit') Create Game
                 
     script.
