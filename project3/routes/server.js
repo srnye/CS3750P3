@@ -26,6 +26,7 @@ io.sockets.on('connection', function(socket)
                 //gameName: obj.gameName,
                 numPlayers: obj.numPlayers,
                 numQPR: obj.numQPR,
+                questionsPlayed: 0,
                 categories: obj.categories,
                 players: [],
                 currentHost: {},
@@ -195,8 +196,51 @@ io.sockets.on('connection', function(socket)
 
         if (games[obj.gameName].playersReady.length == games[obj.gameName].numPlayers)
         {
+            //increment questions played
+            games[gameName].questionsPlayed++;
+
             //emit question results screen
-            io.in(obj.gameName).emit('questionResults', {players: games[obj.gameName].players});
+            if (games[gameName].questionsPlayed == games[gameName].numQPR)
+            {
+                //show round results
+                io.in(gameName).emit('roundResults', 
+                {
+                    players: games[gameName].players
+                });
+                //see if users want to play another round
+                //start timer
+                startRoundResultsTimer(10, gameName);
+                //if all players click play again, start new round
+                socket.on('playAnotherRound', function(obj)
+                {
+                    games[gameName].playersReady.push(obj.name);
+                    if (games[gameName].playersReady.length == games[gameName].numPlayers)
+                    {
+                        stopTimer(gameName);
+                        //start new round
+                        beginRound(gameName);
+                    }
+                });
+
+                socket.on('leaveGame', function(obj)
+                {
+                    //end game
+                    stopTimer(gameName);
+                    //sending emit to players saying game is over
+                    io.in(gameName).emit('gameOver', 
+                    {
+                        players: games[gameName].players,
+                        message: "Someone left the game."
+                    });
+                    //TODO: save game data to db
+
+                });
+            }
+            else
+            {
+                io.in(obj.gameName).emit('questionResults', {players: games[obj.gameName].players});
+                startResultsTimer(10, obj.gameName);
+            }    
         }
         else
         {
@@ -288,6 +332,80 @@ io.sockets.on('connection', function(socket)
         }, 1000);
     }
 
+    function startResultsTimer(seconds, gameName)
+    {
+        var countdown = seconds;
+        //emit client side countdown
+        io.in(gameName).emit('questionResultsTimer', { countdown: seconds });
+        //countdown server side
+        games[gameName].gameInterval = setInterval(function() 
+        {  
+            countdown--;
+            if (countdown == 0)
+            {
+                stopTimer(gameName);
+                //clear ready array
+                games[gameName].playersReady = [];
+
+                //clear answers array
+                games[gameName].answers = [];
+
+                console.log("Host before: " + games[gameName].currentHost.name);
+
+                //change host
+                var hostIndex = games[gameName].questionsPlayed % games[gameName].numPlayers;
+                var host = {name: games[gameName].players[parseInt(hostIndex)].name, socketID: games[gameName].players[parseInt(hostIndex)].socketID};
+                games[gameName].currentHost = host;
+
+                //have other players wait - show timer
+                io.in(gameName).emit('waitForHost');
+                
+                //have host pick question (timed)
+                if (games[gameName].currentHost.socketID == socket.id)
+                {
+                    socket.emit('hostScreen', 
+                    {
+                        categories: JSON.parse(games[gameName].categories),
+                        questions: games[gameName].questions
+                    });
+                }
+                else
+                {
+                    socket.to(games[gameName].currentHost.socketID).emit('hostScreen', 
+                    {
+                        categories: JSON.parse(games[gameName].categories),
+                        questions: games[gameName].questions
+                    });
+                }
+
+                //TODO: make times constants
+                startHostTimer(60, gameName);
+            }
+        }, 1000);
+    }
+
+    function startRoundResultsTimer(seconds, gameName)
+    {
+        var countdown = seconds;
+        //emit client side countdown
+        io.in(gameName).emit('roundResultsTimer', { countdown: seconds });
+        //countdown server side
+        games[gameName].gameInterval = setInterval(function() 
+        {  
+            countdown--;
+            if(countdown == 0)
+            {
+                //end game
+                io.in(gameName).emit('gameOver', 
+                {
+                    players: games[gameName].players,
+                    message: "Timer expired."
+                });
+                //TODO: save game data to db
+            }
+        }, 1000);
+    }
+
     function stopTimer(gameName)
     {
         clearInterval(games[gameName].gameInterval);
@@ -299,22 +417,26 @@ io.sockets.on('connection', function(socket)
         var host = {name: games[gameName].players[0].name, socketID: games[gameName].players[0].socketID};
         games[gameName].currentHost = host; 
 
-        //clear questions array
+        //clear answers array
         games[gameName].answers = [];
 
         //clear ready array
         games[gameName].playersReady = [];
 
-        //have other players wait - TODO: show timer
+        //set questions played to 0
+        games[gameName].questionsPlayed = 0;
+
+        //have other players wait - show timer
         io.in(gameName).emit('waitForHost');
         
-        //TODO: have host pick question (timed)
+        //have host pick question (timed)
         socket.to(games[gameName].currentHost.socketID).emit('hostScreen', 
         {
             categories: JSON.parse(games[gameName].categories),
             questions: games[gameName].questions
         });
 
+        //TODO: make times constants
         startHostTimer(60, gameName);
     }
 });
