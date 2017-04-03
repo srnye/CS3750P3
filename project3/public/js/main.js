@@ -20,6 +20,10 @@ window.onload = function()
     var waitingGuessesLoader = document.getElementById("waitingGuessesLoader");
     var timer = document.getElementById("timer");
 
+    //TIMER INTERVALS
+    var hostInterval;
+    var questionResultsInterval;
+
     //HOST DIV
     var hostDiv = document.getElementById("hostDiv");
     var catDiv = document.getElementById("catDiv");
@@ -37,6 +41,18 @@ window.onload = function()
     var guessAnswerDiv = document.getElementById("guessAnswerDiv");
     var answerGuessHeader = document.getElementById("answerGuessHeader");
     var guessDiv = document.getElementById("guessDiv");
+
+    //QUESTION ANSWER DIV
+    var questionResultsDiv = document.getElementById("questionResultsDiv");
+    var questionResultsTable = document.getElementById("questionResultsTable");
+    var questionResultsTimer = document.getElementById("questionResultsTimer");
+
+    //ROUND RESULTS DIV
+    var roundResultsDiv = document.getElementById("roundResultsDiv");
+    var roundResultsTable = document.getElementById("roundResultsTable");
+    var playAgainBtn = document.getElementById("playAgainBtn");
+    var leaveGameBtn = document.getElementById("leaveGameBtn");
+    var roundResultsTimer = document.getElementById("roundResultsTimer");
 
     socket.emit('join', 
     { 
@@ -62,6 +78,8 @@ window.onload = function()
     {
         //hide lobby
         waitingDiv.style.display = 'none';
+        //hide questions results
+        questionResultsDiv.style.display = 'none';
         //show loader
         waitingHostLoader.style.display = 'block';
     });
@@ -70,6 +88,8 @@ window.onload = function()
     {
         //hide loader
         waitingHostLoader.style.display = 'none';
+        //hide questions results
+        questionResultsDiv.style.display = 'none';
         //show host div
         hostDiv.style.display = 'block';
 
@@ -86,10 +106,16 @@ window.onload = function()
         }
     });
 
-    //timer
+    //host question selection timer
     socket.on('timer', function (data) 
     {  
         timerStart(data.countdown);
+    });
+
+    //question results timer
+    socket.on('questionResultsTimer', function (data) 
+    {  
+        questionTimerStart(data.countdown);
     });
 
     socket.on('showHostQuestions', function(data)
@@ -118,6 +144,8 @@ window.onload = function()
         hostDiv.style.display = 'none';
         //show write answer div
         writeAnswerDiv.style.display = 'block';
+        //clear previous answer text
+        answerTxt.value = "";
         //update divs
         questionHeader.innerHTML = data.question;
 
@@ -137,6 +165,9 @@ window.onload = function()
                 answer: answerTxt.value
             });
         }
+
+        //stop timers
+        stopTimers();
     });
 
     socket.on('waitForAnswers', function()
@@ -152,29 +183,40 @@ window.onload = function()
     {
         //hide answer div
         writeAnswerDiv.style.display = 'none';
+
         //hide loader
         waitingAnswerLoader.style.display = 'none';
 
         guessAnswerDiv.style.display = 'block';
         guessDiv.innerHTML = '';
+
         answerGuessHeader.innerHTML = data.question.question;
 
+        //i feel like the for loop is screwing up our calls. 'a' wont be defined when we call onClick right? we got away with it before since we werent using the index
         for (var a in data.answers)
         {
             var button = document.createElement("button");
             button.className = "btn btn-primary";
             button.innerHTML = data.answers[a].answer;
-            button.onclick = function()
-            {
-                alert("Answer Originator: " + data.answers[a].player + " Answer :" + data.answers[a].answer);
-                //socket.emit('answerChosen', {answer: data.answers[a], gameName: gameName.value, player: playerName.value});
-            };
 
             if (data.answers[a].player != playerName.value)
             {
+                button.onclick = function()
+                {
+                    for (var ans in data.answers)
+                    {
+                        if(data.answers[ans].answer == this.innerHTML)
+                        {
+                                //alert("Answer Originator: " + data.answers[ans].player + " Answer :" + data.answers[ans].answer);
+                                socket.emit('answerChosen', {answer: data.answers[ans], gameName: gameName.value, player: playerName.value});
+                        }
+                    }
+                };
                 guessDiv.appendChild(button);
             }
         }
+
+        
     });
 
     socket.on('waitForGuesses', function()
@@ -185,14 +227,131 @@ window.onload = function()
         waitingGuessesLoader.style.display = 'block';
     });
 
+    socket.on('questionResults', function(data)
+    {
+        //hide wait guesses loader
+        waitingGuessesLoader.style.display = 'none';
+        //hide guess answer div
+        guessAnswerDiv.style.display = 'none';
+        //show questions div
+        questionResultsDiv.style.display = 'block';
+
+        while (questionResultsTable.rows.length > 1)
+        {
+            questionResultsTable.removeChild(1);
+        }
+
+        //sort array on score
+        var players = data.players.sort(function(a, b) 
+        {
+            return b.score - a.score;
+        });
+
+        //populate the results in the table
+        for (var p in players)
+        {
+            var tr = document.createElement("tr");
+            var td = document.createElement("td");
+            var txt = document.createTextNode(parseInt(p)+1);
+
+            td.appendChild(txt);
+            tr.appendChild(td);
+
+            td = document.createElement("td");
+            txt = document.createTextNode(players[p].name);
+
+            td.appendChild(txt);
+            tr.appendChild(td);
+
+            td = document.createElement("td");
+            txt = document.createTextNode(players[p].score);
+
+            td.appendChild(txt);
+            tr.appendChild(td);
+
+            questionResultsTable.appendChild(tr);
+        }
+    });
+
+    socket.on('roundResults', function(data)
+    {
+        //hide wait guesses loader
+        waitingGuessesLoader.style.display = 'none';
+        //hide guess answer div
+        guessAnswerDiv.style.display = 'none';
+        //show round results div
+        roundResultsDiv.style.display = 'block';
+
+        while (questionResultsTable.rows.length > 1)
+        {
+            questionResultsTable.removeChild(1);
+        }
+
+        //sort array on score
+        var players = data.players.sort(function(a, b) 
+        {
+            return b.score - a.score;
+        });
+
+        //populate the results in the table
+        for (var p in players)
+        {
+            var tr = document.createElement("tr");
+            var td = document.createElement("td");
+            var txt = document.createTextNode(parseInt(p)+1);
+
+            td.appendChild(txt);
+            tr.appendChild(td);
+
+            td = document.createElement("td");
+            txt = document.createTextNode(players[p].name);
+
+            td.appendChild(txt);
+            tr.appendChild(td);
+
+            td = document.createElement("td");
+            txt = document.createTextNode(players[p].score);
+
+            td.appendChild(txt);
+            tr.appendChild(td);
+
+            questionResultsTable.appendChild(tr);
+        }
+
+        playAgainBtn.onclick = function()
+        {
+            //LEFT OFF HERE 4/2/17
+            socket.emit();
+        };
+
+        leaveGameBtn.onclick = function()
+        {
+
+        };
+    });
+
     
 function timerStart(countdown) {
     //----------------- TIMER ---------------------
-        setInterval(function() {  
+        hostInterval = setInterval(function() {  
         countdown--;
         timer.innerHTML = countdown;
         timerHost.innerHTML = countdown;
         }, 1000);
+}
+
+function questionTimerStart(countdown) {
+    //----------------- TIMER ---------------------
+        questionResultsInterval = setInterval(function() {  
+        countdown--;
+        questionResultsTimer.innerHTML = countdown;
+        }, 1000);
+}
+
+function stopTimers()
+{
+    clearInterval(hostInterval);
+    clearInterval(questionResultsInterval);
 }
 
 }; //end on load

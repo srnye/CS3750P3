@@ -77,6 +77,32 @@ block content
     h3#answerGuessHeader
     p Guess which answer you think is correct:
     #guessDiv
+
+  #questionResultsDiv(style='display: none;')
+    h2 Question Results:
+    table#questionResultsTable.table.table-striped
+      thead
+        tr
+          th Rank
+          th Player Name
+          th Current Score
+      tbody
+    #questionResultsTimer
+
+  #roundResultsDiv(style='display: none;')
+    h2 Round Results:
+    table#roundResultsTable.table.table-striped
+      thead
+        tr
+          th Rank
+          th Player Name
+          th Round Score
+      tbody
+      button.btn.btn-primary(id='playAgainBtn') Vote to Play Another Round
+      |
+      button.btn.btn-primary(id='leaveGameBtn') Leave Game
+    #roundResultsTimer
+
     
 
   block scripts
