@@ -23,7 +23,7 @@ console.log('Your application is running on http://localhost:' + port);
  */
 
 var server = http.createServer(app);
-var io = socket(server);
+var io = socket(server, {'pingInterval': 120000, 'pingTimeout': 120000});
 
 socketController(io);
 
