@@ -1,8 +1,34 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url('images/redBlurred.jpg');
+  background-size: cover;
 }
 
 a {
   color: #00B7FF;
+}
+
+.jumbotron {
+  text-align: center;
+  background-image: url('images/blurred-background-31.jpg') !important;
+  background-size: cover;
+
+}
+
+#newGame {
+  text-align: left;
+}
+
+#joinGame {
+  text-align: left;
+}
+
+#playerName {
+  text-align: left;
+  padding-left: 25px;
+}
+
+.container-custom {
+  width: 35%;
 }

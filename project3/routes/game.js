@@ -55,6 +55,13 @@ router.get('/playerName', function(req, res){
   })
 })
 
+//*Get game PlayerVotes page */
+router.get('/playersVotes', function(req, res) {
+  res.render('playersVotes', {
+    title: 'Player Votes'
+  })
+})
+
 // Process New Game
 router.post('/newgame', (req, res, next) => {
     const gname = req.body.gname;
