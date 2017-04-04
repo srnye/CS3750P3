@@ -58,6 +58,7 @@ window.onload = function()
     //GAME OVER DIV
     var gameOverDiv = document.getElementById("gameOverDiv");
     var winnerHeader = document.getElementById("winnerHeader");
+    var reasonP = document.getElementById("reasonP");
 
     socket.emit('join', 
     { 
@@ -81,24 +82,16 @@ window.onload = function()
 
     socket.on('waitForHost', function()
     {
-        //hide lobby
-        waitingDiv.style.display = 'none';
-        //hide questions results
-        questionResultsDiv.style.display = 'none';
-        //hide round results div
-        roundResultsDiv.style.display= 'none';
+        //hide divs
+        hideAllDivs();
         //show loader
         waitingHostLoader.style.display = 'block';
     });
     
     socket.on('hostScreen', function(data)
     {
-        //hide loader
-        waitingHostLoader.style.display = 'none';
-        //hide questions results
-        questionResultsDiv.style.display = 'none';
-        //hide round results div
-        roundResultsDiv.style.display= 'none';
+        //hide divs
+        hideAllDivs();
         //show host div
         hostDiv.style.display = 'block';
         //clear cat div
@@ -157,10 +150,8 @@ window.onload = function()
 
     socket.on('writeAnswer', function(data)
     {
-        //hide animation
-        waitingHostLoader.style.display = 'none';
-        //hide host screen
-        hostDiv.style.display = 'none';
+        //hide divs
+        hideAllDivs();
         //show write answer div
         writeAnswerDiv.style.display = 'block';
         //clear previous answer text
@@ -191,8 +182,8 @@ window.onload = function()
 
     socket.on('waitForAnswers', function()
     {
-        //hide answser div
-        writeAnswerDiv.style.display = 'none';
+        //hide divs
+        hideAllDivs();
         //show loader
         waitingAnswerLoader.style.display = 'block';
 
@@ -200,11 +191,8 @@ window.onload = function()
 
     socket.on('guessAnswer', function(data)
     {
-        //hide answer div
-        writeAnswerDiv.style.display = 'none';
-
-        //hide loader
-        waitingAnswerLoader.style.display = 'none';
+        //hide divs
+        hideAllDivs();
 
         guessAnswerDiv.style.display = 'block';
         guessDiv.innerHTML = '';
@@ -240,24 +228,22 @@ window.onload = function()
 
     socket.on('waitForGuesses', function()
     {
-        //hide quess answer div
-        guessAnswerDiv.style.display = 'none';
+        //hide divs
+        hideAllDivs();
         //show loader
         waitingGuessesLoader.style.display = 'block';
     });
 
     socket.on('questionResults', function(data)
     {
-        //hide wait guesses loader
-        waitingGuessesLoader.style.display = 'none';
-        //hide guess answer div
-        guessAnswerDiv.style.display = 'none';
+        //hide divs
+        hideAllDivs();
         //show questions div
         questionResultsDiv.style.display = 'block';
 
         while (questionResultsTable.rows.length > 1)
         {
-            questionResultsTable.removeChild(1);
+            questionResultsTable.deleteRow(1);
         }
 
         //sort array on score
@@ -294,10 +280,8 @@ window.onload = function()
 
     socket.on('roundResults', function(data)
     {
-        //hide wait guesses loader
-        waitingGuessesLoader.style.display = 'none';
-        //hide guess answer div
-        guessAnswerDiv.style.display = 'none';
+        //hide divs
+        hideAllDivs();
         //show round results div
         roundResultsDiv.style.display = 'block';
 
@@ -363,8 +347,9 @@ window.onload = function()
 
     socket.on('gameOver', function(data)
     {
-        //hide round results div
-        roundResultsDiv.style.display = 'none';
+        //hide divs
+        hideAllDivs();
+
         //show game over div
         gameOverDiv.style.display = 'block';
 
@@ -376,6 +361,9 @@ window.onload = function()
 
         //show winner
         winnerHeader.innerHTML = "<strong>" + players[0].name + "</strong>"
+
+        //set reason
+        reasonP.innerHTML = "<strong>Reason:</strong> " + data.message;
     });
 
     
@@ -415,6 +403,20 @@ function stopTimers()
     clearInterval(hostInterval);
     clearInterval(questionResultsInterval);
     clearInterval(roundResultsInterval);
+}
+
+function hideAllDivs()
+{
+    waitingDiv.style.display = 'none';
+    roundResultsDiv.style.display = 'none';
+    hostDiv.style.display = 'none';
+    waitingHostLoader.style.display = 'none';
+    waitingAnswerLoader.style.display = 'none';
+    waitingGuessesLoader.style.display = 'none';
+    writeAnswerDiv.style.display = 'none';
+    guessAnswerDiv.style.display = 'none';
+    questionResultsDiv.style.display = 'none';
+    gameOverDiv.style.display = 'none';
 }
 
 }; //end on load
