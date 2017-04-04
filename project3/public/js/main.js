@@ -23,6 +23,7 @@ window.onload = function()
     //TIMER INTERVALS
     var hostInterval;
     var questionResultsInterval;
+    var roundResultsInterval;
 
     //HOST DIV
     var hostDiv = document.getElementById("hostDiv");
@@ -54,6 +55,11 @@ window.onload = function()
     var leaveGameBtn = document.getElementById("leaveGameBtn");
     var roundResultsTimer = document.getElementById("roundResultsTimer");
 
+    //GAME OVER DIV
+    var gameOverDiv = document.getElementById("gameOverDiv");
+    var winnerHeader = document.getElementById("winnerHeader");
+    var reasonP = document.getElementById("reasonP");
+
     socket.emit('join', 
     { 
         gameName: gameName.value,
@@ -76,22 +82,22 @@ window.onload = function()
 
     socket.on('waitForHost', function()
     {
-        //hide lobby
-        waitingDiv.style.display = 'none';
-        //hide questions results
-        questionResultsDiv.style.display = 'none';
+        //hide divs
+        hideAllDivs();
         //show loader
         waitingHostLoader.style.display = 'block';
     });
     
     socket.on('hostScreen', function(data)
     {
-        //hide loader
-        waitingHostLoader.style.display = 'none';
-        //hide questions results
-        questionResultsDiv.style.display = 'none';
+        //hide divs
+        hideAllDivs();
         //show host div
         hostDiv.style.display = 'block';
+        //clear cat div
+        catDiv.innerHTML = "";
+        //clear host question div
+        hostQDiv.innerHTML = "";
 
         for (var c in data.categories)
         {
@@ -118,6 +124,12 @@ window.onload = function()
         questionTimerStart(data.countdown);
     });
 
+    //round results timer
+    socket.on('roundResultsTimer', function (data) 
+    {  
+        roundResultsTimerStart(data.countdown);
+    });
+
     socket.on('showHostQuestions', function(data)
     {
         //clear previous questions
@@ -138,10 +150,8 @@ window.onload = function()
 
     socket.on('writeAnswer', function(data)
     {
-        //hide animation
-        waitingHostLoader.style.display = 'none';
-        //hide host screen
-        hostDiv.style.display = 'none';
+        //hide divs
+        hideAllDivs();
         //show write answer div
         writeAnswerDiv.style.display = 'block';
         //clear previous answer text
@@ -172,8 +182,8 @@ window.onload = function()
 
     socket.on('waitForAnswers', function()
     {
-        //hide answser div
-        writeAnswerDiv.style.display = 'none';
+        //hide divs
+        hideAllDivs();
         //show loader
         waitingAnswerLoader.style.display = 'block';
 
@@ -181,11 +191,8 @@ window.onload = function()
 
     socket.on('guessAnswer', function(data)
     {
-        //hide answer div
-        writeAnswerDiv.style.display = 'none';
-
-        //hide loader
-        waitingAnswerLoader.style.display = 'none';
+        //hide divs
+        hideAllDivs();
 
         guessAnswerDiv.style.display = 'block';
         guessDiv.innerHTML = '';
@@ -221,24 +228,22 @@ window.onload = function()
 
     socket.on('waitForGuesses', function()
     {
-        //hide quess answer div
-        guessAnswerDiv.style.display = 'none';
+        //hide divs
+        hideAllDivs();
         //show loader
         waitingGuessesLoader.style.display = 'block';
     });
 
     socket.on('questionResults', function(data)
     {
-        //hide wait guesses loader
-        waitingGuessesLoader.style.display = 'none';
-        //hide guess answer div
-        guessAnswerDiv.style.display = 'none';
+        //hide divs
+        hideAllDivs();
         //show questions div
         questionResultsDiv.style.display = 'block';
 
         while (questionResultsTable.rows.length > 1)
         {
-            questionResultsTable.removeChild(1);
+            questionResultsTable.deleteRow(1);
         }
 
         //sort array on score
@@ -275,16 +280,17 @@ window.onload = function()
 
     socket.on('roundResults', function(data)
     {
-        //hide wait guesses loader
-        waitingGuessesLoader.style.display = 'none';
-        //hide guess answer div
-        guessAnswerDiv.style.display = 'none';
+        //hide divs
+        hideAllDivs();
         //show round results div
         roundResultsDiv.style.display = 'block';
 
-        while (questionResultsTable.rows.length > 1)
+        //enable button
+        playAgainBtn.disabled = false;
+
+        while (roundResultsTable.rows.length > 1)
         {
-            questionResultsTable.removeChild(1);
+            roundResultsTable.removeChild(1);
         }
 
         //sort array on score
@@ -315,36 +321,80 @@ window.onload = function()
             td.appendChild(txt);
             tr.appendChild(td);
 
-            questionResultsTable.appendChild(tr);
+            roundResultsTable.appendChild(tr);
         }
 
         playAgainBtn.onclick = function()
         {
-            //LEFT OFF HERE 4/2/17
-            socket.emit();
+            socket.emit('playAnotherRound',
+            {
+                name: playerName.value,
+                gameName: gameName.value
+            });
+            stopTimers();
+            playAgainBtn.disabled = true;
         };
 
         leaveGameBtn.onclick = function()
         {
-
+            socket.emit('leaveGame',
+            {
+                gameName: gameName.value
+            });
+            stopTimers();
         };
     });
 
+    socket.on('gameOver', function(data)
+    {
+        //hide divs
+        hideAllDivs();
+
+        //show game over div
+        gameOverDiv.style.display = 'block';
+
+        //sort array on score
+        var players = data.players.sort(function(a, b) 
+        {
+            return b.score - a.score;
+        });
+
+        //show winner
+        winnerHeader.innerHTML = "<strong>" + players[0].name + "</strong>"
+
+        //set reason
+        reasonP.innerHTML = "<strong>Reason:</strong> " + data.message;
+    });
+
     
-function timerStart(countdown) {
+function timerStart(countdown) 
+{
     //----------------- TIMER ---------------------
-        hostInterval = setInterval(function() {  
-        countdown--;
-        timer.innerHTML = countdown;
-        timerHost.innerHTML = countdown;
+        hostInterval = setInterval(function() 
+        {  
+            countdown--;
+            timer.innerHTML = countdown;
+            timerHost.innerHTML = countdown;
         }, 1000);
 }
 
-function questionTimerStart(countdown) {
+function questionTimerStart(countdown) 
+{
     //----------------- TIMER ---------------------
-        questionResultsInterval = setInterval(function() {  
-        countdown--;
-        questionResultsTimer.innerHTML = countdown;
+        questionResultsInterval = setInterval(function() 
+        {  
+            countdown--;
+            questionResultsTimer.innerHTML = countdown;
+        }, 1000);
+}
+
+function roundResultsTimerStart(countdown)
+{
+    //----------------- TIMER ---------------------
+        roundResultsInterval = setInterval(function() 
+        {  
+            countdown--;
+            roundResultsTimer.innerHTML = countdown;
         }, 1000);
 }
 
@@ -352,6 +402,21 @@ function stopTimers()
 {
     clearInterval(hostInterval);
     clearInterval(questionResultsInterval);
+    clearInterval(roundResultsInterval);
+}
+
+function hideAllDivs()
+{
+    waitingDiv.style.display = 'none';
+    roundResultsDiv.style.display = 'none';
+    hostDiv.style.display = 'none';
+    waitingHostLoader.style.display = 'none';
+    waitingAnswerLoader.style.display = 'none';
+    waitingGuessesLoader.style.display = 'none';
+    writeAnswerDiv.style.display = 'none';
+    guessAnswerDiv.style.display = 'none';
+    questionResultsDiv.style.display = 'none';
+    gameOverDiv.style.display = 'none';
 }
 
 }; //end on load
