@@ -24,6 +24,8 @@ window.onload = function()
     var hostInterval;
     var questionResultsInterval;
     var roundResultsInterval;
+    var writeAnswerInterval;
+    var guessAnswerInterval;
 
     //HOST DIV
     var hostDiv = document.getElementById("hostDiv");
@@ -37,11 +39,13 @@ window.onload = function()
     var warningMsg = document.getElementById("warningMsg");
     var answerTxt = document.getElementById("answerTxt");
     var answerSubmitBtn = document.getElementById("answerSubmitBtn");
-
+    var writeAnswerTimer = document.getElementById("timerWriteAnswer");
+    
     //GUESS DIV
     var guessAnswerDiv = document.getElementById("guessAnswerDiv");
     var answerGuessHeader = document.getElementById("answerGuessHeader");
     var guessDiv = document.getElementById("guessDiv");
+    var guessAnswerTimer = document.getElementById("timerGuessAnswer");
 
     //QUESTION ANSWER DIV
     var questionResultsDiv = document.getElementById("questionResultsDiv");
@@ -128,6 +132,18 @@ window.onload = function()
     socket.on('roundResultsTimer', function (data) 
     {  
         roundResultsTimerStart(data.countdown);
+    });
+
+    //write answer timer
+    socket.on('writeAnswerTimer', function (data) 
+    {  
+        writeAnswerTimerStart(data.countdown);
+    });
+
+    //guess answer timer
+    socket.on('guessAnswerTimer', function (data) 
+    {  
+        guessAnswerTimerStart(data.countdown);
     });
 
     socket.on('showHostQuestions', function(data)
@@ -398,11 +414,33 @@ function roundResultsTimerStart(countdown)
         }, 1000);
 }
 
+function writeAnswerTimerStart(countdown)
+{
+    //----------------- TIMER ---------------------
+        writeAnswerInterval = setInterval(function() 
+        {  
+            countdown--;
+            writeAnswerTimer.innerHTML = countdown;
+        }, 1000);
+}
+
+function guessAnswerTimerStart(countdown)
+{
+    //----------------- TIMER ---------------------
+        guessAnswerInterval = setInterval(function() 
+        {  
+            countdown--;
+            guessAnswerTimer.innerHTML = countdown;
+        }, 1000);
+}
+
 function stopTimers()
 {
     clearInterval(hostInterval);
     clearInterval(questionResultsInterval);
     clearInterval(roundResultsInterval);
+    clearInterval(writeAnswerInterval);
+    clearInterval(guessAnswerInterval);
 }
 
 function hideAllDivs()

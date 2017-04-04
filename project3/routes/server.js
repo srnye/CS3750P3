@@ -145,7 +145,8 @@ io.sockets.on('connection', function(socket)
         games[obj.gameName].questions.splice(index,1);
         //emit question to all players (including host) in answer div
         io.in(obj.gameName).emit('writeAnswer', {question: obj.question});
-        //TODO: start timer
+        //start timer
+        startWriteAnswerTimer(60 ,obj.gameName);
     });
 
     socket.on('answerSubmitted', function(obj)
@@ -158,6 +159,8 @@ io.sockets.on('connection', function(socket)
         //if yes, send to guessing div
         if (games[obj.gameName].answers.length == games[obj.gameName].numPlayers)
         {
+            stopTimer(obj.gameName);
+            startGuessAnswerTimer(60 ,obj.gameName)
             var answer = {player: "", answer: games[obj.gameName].currentQuestion.answer.toUpperCase()};
             games[obj.gameName].answers.push(answer);
             io.in(obj.gameName).emit('guessAnswer', 
@@ -347,7 +350,40 @@ io.sockets.on('connection', function(socket)
         }, 1000);
     }
 
-    //TODO: make new timer functions 
+    //TODO: make new timer functions
+    function startWriteAnswerTimer(seconds, gameName)
+    {
+        var countdown = seconds;
+        //emit client side countdown
+        io.in(gameName).emit('writeAnswerTimer', { countdown: seconds });
+        //countdown server side
+        games[gameName].gameInterval = setInterval(function() 
+        {  
+            countdown--;
+            if (countdown == 0)
+            {
+                stopTimer(gameName);
+                //TODO                
+            }
+        }, 1000);
+    }
+
+    function startGuessAnswerTimer(seconds, gameName)
+    {
+        var countdown = seconds;
+        //emit client side countdown
+        io.in(gameName).emit('guessAnswerTimer', { countdown: seconds });
+        //countdown server side
+        games[gameName].gameInterval = setInterval(function() 
+        {  
+            countdown--;
+            if (countdown == 0)
+            {
+                stopTimer(gameName);
+                //TODO
+            }
+        }, 1000);
+    }
 
     function startResultsTimer(seconds, gameName)
     {
