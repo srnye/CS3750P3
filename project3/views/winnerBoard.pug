@@ -19,39 +19,40 @@ block content
       script(src='http://code.jquery.com/jquery.js')
       script(src='js/bootstrap.min.js')
       .container
-          .jumbotron
-              h1 Players, Scores, and Rankings
-          table#pickle.table.table-hover.table-striped.table-bordered
-              thead
-                  tr
-                      th Name
-                      th Score
-                      th Ranking
-              tbody
-                  tr
-                      th(scope='row') Beth
-                      td 3000
-                      td 1st
-                  tr
-                      th(scope='row') Blake
-                      td 2565
-                      td 2nd
-                  tr
-                      th(scope='row') Ian
-                      td 2387
-                      td 3rd
-                  tr
-                      th(scope='row') Steve
-                      td 1978
-                      td 4th
-                  tr
-                      th(scope='row') Wes
-                      td 1785
-                      td 5th
-                  tr
-                      th(scope='row') Zac
-                      td 1686
-                      td 6th
+        body
+            .jumbotron
+                h1 Players, Scores, and Rankings
+            table#pickle.table.table-hover.table-striped.table-bordered
+                thead
+                    tr
+                        th Name
+                        th Score
+                        th Ranking
+                tbody
+                    tr
+                        th(scope='row') Beth
+                        td 3000
+                        td 1st
+                    tr
+                        th(scope='row') Blake
+                        td 2565
+                        td 2nd
+                    tr
+                        th(scope='row') Ian
+                        td 2387
+                        td 3rd
+                    tr
+                        th(scope='row') Steve
+                        td 1978
+                        td 4th
+                    tr
+                        th(scope='row') Wes
+                        td 1785
+                        td 5th
+                    tr
+                        th(scope='row') Zac
+                        td 1686
+                        td 6th
 
   script.
       $(document).ready(function() {
