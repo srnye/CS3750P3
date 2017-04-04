@@ -16,8 +16,9 @@ a {
 
 }
 
-#newGame {
-  text-align: left;
+.panel {
+   background-image: url('images/blurred-background-31.jpg') !important;
+   background-size: cover;
 }
 
 #joinGame {
