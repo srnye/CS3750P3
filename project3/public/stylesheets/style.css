@@ -17,6 +17,8 @@ a {
 }
 
 .panel {
+   padding-left:10px;
+   padding-bottom: 10px;
    background-image: url('images/blurred-background-31.jpg') !important;
    background-size: cover;
 }
@@ -32,4 +34,8 @@ a {
 
 .container-custom {
   width: 35%;
+}
+
+#addQuestionDropDown {
+  width: 25%;
 }
