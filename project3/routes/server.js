@@ -197,39 +197,39 @@ io.sockets.on('connection', function(socket)
         if (games[obj.gameName].playersReady.length == games[obj.gameName].numPlayers)
         {
             //increment questions played
-            games[gameName].questionsPlayed++;
+            games[obj.gameName].questionsPlayed++;
 
             //emit question results screen
-            if (games[gameName].questionsPlayed == games[gameName].numQPR)
+            if (games[obj.gameName].questionsPlayed == games[obj.gameName].numQPR)
             {
                 //show round results
-                io.in(gameName).emit('roundResults', 
+                io.in(obj.gameName).emit('roundResults', 
                 {
-                    players: games[gameName].players
+                    players: games[obj.gameName].players
                 });
                 //see if users want to play another round
                 //start timer
-                startRoundResultsTimer(10, gameName);
+                startRoundResultsTimer(10, obj.gameName);
                 //if all players click play again, start new round
                 socket.on('playAnotherRound', function(obj)
                 {
-                    games[gameName].playersReady.push(obj.name);
-                    if (games[gameName].playersReady.length == games[gameName].numPlayers)
+                    games[obj.gameName].playersReady.push(obj.name);
+                    if (games[obj.gameName].playersReady.length == games[obj.gameName].numPlayers)
                     {
-                        stopTimer(gameName);
+                        stopTimer(obj.gameName);
                         //start new round
-                        beginRound(gameName);
+                        beginRound(obj.gameName);
                     }
                 });
 
                 socket.on('leaveGame', function(obj)
                 {
                     //end game
-                    stopTimer(gameName);
+                    stopTimer(obj.gameName);
                     //sending emit to players saying game is over
-                    io.in(gameName).emit('gameOver', 
+                    io.in(obj.gameName).emit('gameOver', 
                     {
-                        players: games[gameName].players,
+                        players: games[obj.gameName].players,
                         message: "Someone left the game."
                     });
                     //TODO: save game data to db
