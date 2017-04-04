@@ -19,6 +19,7 @@ io.sockets.on('connection', function(socket)
         {
             for (var p in games[g].players)
             {
+                //TODO: threw exception when host disconnected, value of player[p] is undefined
                 if (games[g].players[p].socketID == socket.id)
                 {
                     endGame(g, "Someone left the game.");
@@ -151,18 +152,39 @@ io.sockets.on('connection', function(socket)
 
     socket.on('answerSubmitted', function(obj)
     {
-        //TODO: resolve duplicate answers
         //update game information
-        var rightAnswer = {player: obj.playerName, answer: obj.answer.toUpperCase()};
-        games[obj.gameName].answers.push(rightAnswer);
+        var rightAnswer = {player: "", answer: games[obj.gameName].currentQuestion.answer.toUpperCase()};
+        var answer = {player: obj.playerName, answer: obj.answer.toUpperCase()};
+        
+        //TODO: resolve duplicate answers
+        //award point to player but do not push if they guessed the answer
+        if(rightAnswer == answer)
+        {
+            //find index of play TODO: put this in a function because we do it a bunch?
+            var index = 0;
+            for (var p in games[obj.gameName].players)
+            {
+                if (games[obj.gameName].players[p].name == obj.player)
+                {
+                    index = p;
+                    break;
+                }
+            }
+            games[obj.gameName].players[p].score += games[obj.gameName].numPlayers + 3;
+            
+        }
+        else
+        {
+            //pushing player answer into answer array
+            games[obj.gameName].answers.push(answer);
+        }
         //check to see if all players submitted answers
         //if yes, send to guessing div
         if (games[obj.gameName].answers.length == games[obj.gameName].numPlayers)
         {
             stopTimer(obj.gameName);
             startGuessAnswerTimer(60 ,obj.gameName)
-            var answer = {player: "", answer: games[obj.gameName].currentQuestion.answer.toUpperCase()};
-            games[obj.gameName].answers.push(answer);
+            games[obj.gameName].answers.push(rightAnswer);
             io.in(obj.gameName).emit('guessAnswer', 
             {
                 question: games[obj.gameName].currentQuestion,
@@ -456,7 +478,7 @@ io.sockets.on('connection', function(socket)
         //clear ready array
         games[gameName].playersReady = [];
 
-        //countdown server side
+        //countdown server side TODO: error thrown when timer ran out to play again
         games[gameName].gameInterval = setInterval(function() 
         {  
             countdown--;
@@ -529,7 +551,7 @@ io.sockets.on('connection', function(socket)
     function endGame(gameName, message)
     {
         stopTimer(gameName);
-        //end game
+        //end game TODO: Display the list of all players/score to the end game screen
         io.in(gameName).emit('gameOver', 
         {
             players: games[gameName].players,
