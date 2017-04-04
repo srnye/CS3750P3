@@ -23,6 +23,7 @@ window.onload = function()
     //TIMER INTERVALS
     var hostInterval;
     var questionResultsInterval;
+    var roundResultsInterval;
 
     //HOST DIV
     var hostDiv = document.getElementById("hostDiv");
@@ -54,6 +55,10 @@ window.onload = function()
     var leaveGameBtn = document.getElementById("leaveGameBtn");
     var roundResultsTimer = document.getElementById("roundResultsTimer");
 
+    //GAME OVER DIV
+    var gameOverDiv = document.getElementById("gameOverDiv");
+    var winnerHeader = document.getElementById("winnerHeader");
+
     socket.emit('join', 
     { 
         gameName: gameName.value,
@@ -80,6 +85,8 @@ window.onload = function()
         waitingDiv.style.display = 'none';
         //hide questions results
         questionResultsDiv.style.display = 'none';
+        //hide round results div
+        roundResultsDiv.style.display= 'none';
         //show loader
         waitingHostLoader.style.display = 'block';
     });
@@ -90,8 +97,14 @@ window.onload = function()
         waitingHostLoader.style.display = 'none';
         //hide questions results
         questionResultsDiv.style.display = 'none';
+        //hide round results div
+        roundResultsDiv.style.display= 'none';
         //show host div
         hostDiv.style.display = 'block';
+        //clear cat div
+        catDiv.innerHTML = "";
+        //clear host question div
+        hostQDiv.innerHTML = "";
 
         for (var c in data.categories)
         {
@@ -116,6 +129,12 @@ window.onload = function()
     socket.on('questionResultsTimer', function (data) 
     {  
         questionTimerStart(data.countdown);
+    });
+
+    //round results timer
+    socket.on('roundResultsTimer', function (data) 
+    {  
+        roundResultsTimerStart(data.countdown);
     });
 
     socket.on('showHostQuestions', function(data)
@@ -282,9 +301,12 @@ window.onload = function()
         //show round results div
         roundResultsDiv.style.display = 'block';
 
-        while (questionResultsTable.rows.length > 1)
+        //enable button
+        playAgainBtn.disabled = false;
+
+        while (roundResultsTable.rows.length > 1)
         {
-            questionResultsTable.removeChild(1);
+            roundResultsTable.removeChild(1);
         }
 
         //sort array on score
@@ -315,36 +337,76 @@ window.onload = function()
             td.appendChild(txt);
             tr.appendChild(td);
 
-            questionResultsTable.appendChild(tr);
+            roundResultsTable.appendChild(tr);
         }
 
         playAgainBtn.onclick = function()
         {
-            //LEFT OFF HERE 4/2/17
-            socket.emit();
+            socket.emit('playAnotherRound',
+            {
+                name: playerName.value,
+                gameName: gameName.value
+            });
+            stopTimers();
+            playAgainBtn.disabled = true;
         };
 
         leaveGameBtn.onclick = function()
         {
-
+            socket.emit('leaveGame',
+            {
+                gameName: gameName.value
+            });
+            stopTimers();
         };
     });
 
+    socket.on('gameOver', function(data)
+    {
+        //hide round results div
+        roundResultsDiv.style.display = 'none';
+        //show game over div
+        gameOverDiv.style.display = 'block';
+
+        //sort array on score
+        var players = data.players.sort(function(a, b) 
+        {
+            return b.score - a.score;
+        });
+
+        //show winner
+        winnerHeader.innerHTML = "<strong>" + players[0].name + "</strong>"
+    });
+
     
-function timerStart(countdown) {
+function timerStart(countdown) 
+{
     //----------------- TIMER ---------------------
-        hostInterval = setInterval(function() {  
-        countdown--;
-        timer.innerHTML = countdown;
-        timerHost.innerHTML = countdown;
+        hostInterval = setInterval(function() 
+        {  
+            countdown--;
+            timer.innerHTML = countdown;
+            timerHost.innerHTML = countdown;
         }, 1000);
 }
 
-function questionTimerStart(countdown) {
+function questionTimerStart(countdown) 
+{
     //----------------- TIMER ---------------------
-        questionResultsInterval = setInterval(function() {  
-        countdown--;
-        questionResultsTimer.innerHTML = countdown;
+        questionResultsInterval = setInterval(function() 
+        {  
+            countdown--;
+            questionResultsTimer.innerHTML = countdown;
+        }, 1000);
+}
+
+function roundResultsTimerStart(countdown)
+{
+    //----------------- TIMER ---------------------
+        roundResultsInterval = setInterval(function() 
+        {  
+            countdown--;
+            roundResultsTimer.innerHTML = countdown;
         }, 1000);
 }
 
@@ -352,6 +414,7 @@ function stopTimers()
 {
     clearInterval(hostInterval);
     clearInterval(questionResultsInterval);
+    clearInterval(roundResultsInterval);
 }
 
 }; //end on load

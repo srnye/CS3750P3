@@ -98,10 +98,17 @@ block content
           th Player Name
           th Round Score
       tbody
-      button.btn.btn-primary(id='playAgainBtn') Vote to Play Another Round
-      |
-      button.btn.btn-primary(id='leaveGameBtn') Leave Game
+    button.btn.btn-primary(id='playAgainBtn') Vote to Play Another Round
+    |
+    button.btn.btn-primary(id='leaveGameBtn') Leave Game
     #roundResultsTimer
+
+  #gameOverDiv(style='display: none;')
+    h1 Game over
+    h2 Winner:
+    h1#winnerHeader(align='center')
+    |
+    a.btn.btn-primary(href='/', align='center') Home
 
     
 
