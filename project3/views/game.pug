@@ -12,20 +12,21 @@ block content
 
   //initial waiting lobby
   #waitingDiv.container
-    h1 Game Name: #{gameName}
-    h4 Expected Players: #{numPlayers}
-    p The game will start when all players join.
-    table#waitingTable.table
-      thead
-        tr
-          th #
-          th Player
-      tbody
-      - var n = 1;
-        while n <= numPlayers
+    .panel
+      h1 <strong>Game Name: #{gameName}
+      h4 Expected Players: #{numPlayers}
+      p The game will start when all players join.
+      table#waitingTable.table
+        thead
           tr
-            td= n++
-            td waiting...
+            th <strong> #
+            th <strong>Player
+        tbody
+        - var n = 1;
+          while n <= numPlayers
+            tr
+              td= n++
+              td waiting...
 
   #waitingHostLoader(style='display: none;')
     .spinner
@@ -34,6 +35,7 @@ block content
       .rect3
       .rect4
       .rect5
+    .panel
     h1(align='center') Host is picking question...
     #timer
 
@@ -44,7 +46,8 @@ block content
       .rect3
       .rect4
       .rect5
-    h1(align='center') Waiting on other users to submit answers...
+    .panel
+      h1(align='center') Waiting on other users to submit answers...
 
   #waitingGuessesLoader(style='display: none;')
     .spinner
@@ -53,23 +56,26 @@ block content
       .rect3
       .rect4
       .rect5
-    h1(align='center') Waiting on other users to guess correct answer...
+    .panel
+      h1(align='center') Waiting on other users to guess correct answer...
 
   #hostDiv(style='display: none;')
-    p Choose a category from the categories below:
-    #catDiv
-    #hostQDiv
-    #timerHost
+    .panel
+      h3 Choose a category from the categories below:
+      #catDiv
+      #hostQDiv
+      #timerHost
 
 
   #writeAnswerDiv(style='display: none;')
-    h2 Question:
-    h3#questionHeader
-    #warningMsg.alert.alert-warning(style='display: none;')
-    .form-group
-      label Your answer:
-      input.form-control(type='text', id='answerTxt', placeholder='Your answer')
-    button.btn.btn-primary(id='answerSubmitBtn') Submit
+    .panel
+      h2 Question:
+      h3#questionHeader
+      #warningMsg.alert.alert-warning(style='display: none;')
+      .form-group
+        label Your answer:
+        input.form-control(type='text', id='answerTxt', placeholder='Your answer')
+      button.btn.btn-primary(id='answerSubmitBtn') Submit
     #timerWriteAnswer
 
 
