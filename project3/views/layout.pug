@@ -15,6 +15,12 @@ html
       include ../public/css/loading.css
 
   body
+    // navbar
+    a.nav-btn(href='/') Home
+    a.nav-btn(href='/game/newgame') Create New Game
+    a.nav-btn(href='/game/joingame') Join Existing Game
+    a.nav-btn(href='/manage/questions') Manage Questions
+    hr
     block content
     hr
     footer
