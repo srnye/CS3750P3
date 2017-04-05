@@ -21,6 +21,9 @@ router.get('/newgame', function(req, res){
 
 /* GET game page */
 router.get('/', function(req, res){
+  if(playerName === undefined) {
+    res.redirect('/game/joingame');
+  }
   Question.getQuestions((err, questions) => 
   {
     if(err){
