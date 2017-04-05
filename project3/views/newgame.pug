@@ -1,10 +1,11 @@
 extends layout
 
 block content
-  .container
-    h1= title
-    include ./includes/messages.pug
-    form(method='post', action='/game/newgame')
+    .content
+        .center-div
+            h1= title
+            include ./includes/messages.pug
+            form(method='post', action='/game/newgame')
                 .form-group
                     label Game name:
                     input.form-control(type='text', name='gname', placeholder='Game name')
@@ -19,31 +20,27 @@ block content
                     input.form-control(type='text', name='playername', placeholder='Player Name', required)
                 .form-group
                     label Select Categories (choose at least 1)
-                    .checkbox
-                    label
-                        input(type='checkbox', onClick='toggle(this)')
-                        | Select All
-                    .checkbox
-                    label
-                        input(type='checkbox', name ='category', value='Definitions')
-                        | Definitions
-                    .checkbox
-                    label
-                        input(type='checkbox', name ='category', value='Famous People')
-                        | Famous People
-                    .checkbox
-                    label
-                        input(type='checkbox', name ='category', value='Acronyms')
-                        | Acronyms
-                    .checkbox
-                    label
-                        input(type='checkbox', name ='category', value='Movie Headlines')
-                        | Movie Headlines
-                    .checkbox
-                    label
-                        input(type='checkbox', name ='category', value='Ludicrous Laws')
-                        | Ludicrous Laws
+                    .sub-content
+                        label
+                            input(type='checkbox', onClick='toggle(this)')
+                            | Select All
+                        hr
+                        label
+                            input(type='checkbox', name ='category', value='Definitions')
+                            | Definitions
+                        label
+                            input(type='checkbox', name ='category', value='Famous People')
+                            | Famous People
+                        label
+                            input(type='checkbox', name ='category', value='Acronyms')
+                            | Acronyms
+                        label
+                            input(type='checkbox', name ='category', value='Movie Headlines')
+                            | Movie Headlines
+                        label
+                            input(type='checkbox', name ='category', value='Ludicrous Laws')
+                            | Ludicrous Laws
                 button.btn.btn-primary(type='submit') Create Game
-                
-    script.
-      function toggle(source) { checkboxes = document.getElementsByName('category'); for(var i=0, n=checkboxes.length;i<n;i++) {checkboxes[i].checked = source.checked;} };
+
+        script.
+            function toggle(source) { checkboxes = document.getElementsByName('category'); for(var i=0, n=checkboxes.length;i<n;i++) {checkboxes[i].checked = source.checked;} };

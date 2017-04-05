@@ -13,7 +13,40 @@ a {
   text-align: center;
   background-image: url('images/blurred-background-31.jpg') !important;
   background-size: cover;
+}
 
+
+/* default page content container */
+
+.content {
+  color: #fff;
+  border: solid 1px #555;
+  background-color: rgba(0, 0, 0, 0.9);
+  padding: 30px;
+}
+
+.sub-content {
+  border: solid 1px #555;
+  background-color: rgba(0, 0, 0, 0.9);
+  max-width: 300px;
+  padding: 30px;
+}
+
+.center-div {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.content input {
+  max-width: 200px;
+}
+
+.content label {
+  display: block;
+}
+
+.content input[type=checkbox] {
+  margin-right: 10px;
 }
 
 #newGame {
