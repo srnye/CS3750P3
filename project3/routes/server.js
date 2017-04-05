@@ -157,6 +157,14 @@ io.sockets.on('connection', function(socket)
         var answer = {player: obj.playerName, answer: obj.answer.toUpperCase()};
         
         //TODO: resolve duplicate answers
+        for (var a in games[obj.gameName].answers)
+        {
+            //if answer is alraedy in the array
+            if (games[obj.gameName].answers[a] == answer)
+            {
+            }
+        }
+
         //award point to player but do not push if they guessed the answer
         if(rightAnswer == answer)
         {
@@ -164,13 +172,13 @@ io.sockets.on('connection', function(socket)
             var index = 0;
             for (var p in games[obj.gameName].players)
             {
-                if (games[obj.gameName].players[p].name == obj.player)
+                if (games[obj.gameName].players[p].name == obj.playerName)
                 {
                     index = p;
                     break;
                 }
             }
-            games[obj.gameName].players[p].score += games[obj.gameName].numPlayers + 3;
+            games[obj.gameName].players[p].score += games[obj.gameName].numPlayers + 1;
             
         }
         else
@@ -385,7 +393,7 @@ io.sockets.on('connection', function(socket)
             if (countdown == 0)
             {
                 stopTimer(gameName);
-                //TODO                
+                //TODO move on to geuss answer           
             }
         }, 1000);
     }
@@ -402,7 +410,7 @@ io.sockets.on('connection', function(socket)
             if (countdown == 0)
             {
                 stopTimer(gameName);
-                //TODO
+                //TODO move on to question results
             }
         }, 1000);
     }
