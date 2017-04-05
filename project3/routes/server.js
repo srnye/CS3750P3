@@ -530,7 +530,7 @@ io.sockets.on('connection', function(socket)
         //clear ready array
         games[gameName].playersReady = [];
 
-        //countdown server side TODO: error thrown when timer ran out to play again
+        //countdown server side TODO: error thrown when timer ran out to play again. but not when i tried it again. could be fine?
         games[gameName].gameInterval = setInterval(function() 
         {  
             countdown--;
