@@ -73,7 +73,8 @@ router.post('/newgame', (req, res, next) => {
             errors: errors
         });
     } else {
-      //TODO: create new game socket with information
+
+     //TODO: check if game name is null and create generated name if so
 
       gameName = gname;
       numPlayers = numplayers;
@@ -101,7 +102,6 @@ router.post('/joingame', (req, res, next) =>
           errors: errors
       });
   } else {
-    //TODO: create new game socket with information
 
     gameName = gname;
     numPlayers = numplayers;

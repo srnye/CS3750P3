@@ -70,6 +70,7 @@ block content
       label Your answer:
       input.form-control(type='text', id='answerTxt', placeholder='Your answer')
     button.btn.btn-primary(id='answerSubmitBtn') Submit
+    #timerWriteAnswer
 
 
   #guessAnswerDiv(style='display: none;')
@@ -77,6 +78,41 @@ block content
     h3#answerGuessHeader
     p Guess which answer you think is correct:
     #guessDiv
+    #timerGuessAnswer
+
+  #questionResultsDiv(style='display: none;')
+    h2 Question Results:
+    table#questionResultsTable.table.table-striped
+      thead
+        tr
+          th Rank
+          th Player Name
+          th Current Score
+      tbody
+    #questionResultsTimer
+
+  #roundResultsDiv(style='display: none;')
+    h2 Round Results:
+    table#roundResultsTable.table.table-striped
+      thead
+        tr
+          th Rank
+          th Player Name
+          th Round Score
+      tbody
+    button.btn.btn-primary(id='playAgainBtn') Vote to Play Another Round
+    |
+    button.btn.btn-primary(id='leaveGameBtn') Leave Game
+    #roundResultsTimer
+
+  #gameOverDiv(style='display: none;')
+    h1 Game over
+    p#reasonP
+    h2 Winner:
+    h1#winnerHeader(align='center')
+    |
+    a.btn.btn-primary(href='/', align='center') Home
+
     
 
   block scripts
