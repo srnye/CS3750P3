@@ -20,6 +20,7 @@ io.sockets.on('connection', function(socket)
             for (var p in games[g].players)
             {
                 //TODO: threw exception when host disconnected, value of player[p] is undefined
+                //should this be games[g].players[p].socketID != socket.id
                 if (games[g].players[p].socketID == socket.id)
                 {
                     endGame(g, "Someone left the game.");
@@ -147,7 +148,7 @@ io.sockets.on('connection', function(socket)
         //emit question to all players (including host) in answer div
         io.in(obj.gameName).emit('writeAnswer', {question: obj.question});
         //start timer
-        startWriteAnswerTimer(60 ,obj.gameName);
+        startWriteAnswerTimer(30 ,obj.gameName);
     });
 
     socket.on('answerSubmitted', function(obj)
@@ -156,19 +157,19 @@ io.sockets.on('connection', function(socket)
         var rightAnswer = {player: "", answer: games[obj.gameName].currentQuestion.answer.toUpperCase()};
         var answer = {player: obj.playerName, answer: obj.answer.toUpperCase()};
         
-        //TODO: resolve duplicate answers
-        for (var a in games[obj.gameName].answers)
-        {
-            //if answer is alraedy in the array
-            if (games[obj.gameName].answers[a] == answer)
-            {
-            }
-        }
+        //resolve duplicate answers. doesn't tell us to do this in requirements
+        // for (var a in games[obj.gameName].answers)
+        // {
+        //     //if answer is alraedy in the array
+        //     if (games[obj.gameName].answers[a] == answer)
+        //     {
+        //     }
+        // }
 
         //award point to player but do not push if they guessed the answer
         if(rightAnswer == answer)
         {
-            //find index of play TODO: put this in a function because we do it a bunch?
+            //find index of play 
             var index = 0;
             for (var p in games[obj.gameName].players)
             {
@@ -191,7 +192,7 @@ io.sockets.on('connection', function(socket)
         if (games[obj.gameName].answers.length == games[obj.gameName].numPlayers)
         {
             stopTimer(obj.gameName);
-            startGuessAnswerTimer(60 ,obj.gameName)
+            startGuessAnswerTimer(30 ,obj.gameName)
             games[obj.gameName].answers.push(rightAnswer);
             io.in(obj.gameName).emit('guessAnswer', 
             {
@@ -250,6 +251,8 @@ io.sockets.on('connection', function(socket)
             //emit question results screen
             if (games[obj.gameName].questionsPlayed == games[obj.gameName].numQPR)
             {
+                //stop timer
+                stopTimer(gameName);
                 //show round results
                 io.in(obj.gameName).emit('roundResults', 
                 {
@@ -262,6 +265,9 @@ io.sockets.on('connection', function(socket)
             }
             else
             {
+                //stop timer
+                stopTimer(gameName);
+                //display question results
                 io.in(obj.gameName).emit('questionResults', {players: games[obj.gameName].players});
                 startResultsTimer(10, obj.gameName);
             }    
@@ -393,7 +399,18 @@ io.sockets.on('connection', function(socket)
             if (countdown == 0)
             {
                 stopTimer(gameName);
-                //TODO move on to geuss answer           
+                //TODO - completed by Ian
+                //move on to geuss answer
+                startGuessAnswerTimer(30 ,gameName)
+                //push right answer to array
+                var rightAnswer = {player: "", answer: games[gameName].currentQuestion.answer.toUpperCase()};
+                games[gameName].answers.push(rightAnswer);
+                io.in(gameName).emit('guessAnswer', 
+                {
+                    question: games[gameName].currentQuestion,
+                    answers: shuffle(games[gameName].answers),
+                    gameName: gameName
+                });           
             }
         }, 1000);
     }
@@ -410,7 +427,34 @@ io.sockets.on('connection', function(socket)
             if (countdown == 0)
             {
                 stopTimer(gameName);
-                //TODO move on to question results
+                //TODO-completed by Ian
+                //move on to question results
+                //increment questions played
+                games[gameName].questionsPlayed++;
+
+                //emit question results screen
+                if (games[gameName].questionsPlayed == games[gameName].numQPR)
+                {
+                    //stop timer
+                    stopTimer(gameName);
+                    //show round results
+                    io.in(gameName).emit('roundResults', 
+                    {
+                        players: games[gameName].players
+                    });
+                    //see if users want to play another round
+                    //start timer
+                    startRoundResultsTimer(10, gameName);
+                    //if all players click play again, start new round
+                }
+                else
+                {
+                    //stop timer
+                    stopTimer(gameName);
+                    //display question results
+                    io.in(gameName).emit('questionResults', {players: games[gameName].players});
+                    startResultsTimer(10, gameName);
+                }
             }
         }, 1000);
     }
