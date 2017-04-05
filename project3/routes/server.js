@@ -266,7 +266,7 @@ io.sockets.on('connection', function(socket)
             else
             {
                 //stop timer
-                stopTimer(gameName);
+                stopTimer(obj.gameName);
                 //display question results
                 io.in(obj.gameName).emit('questionResults', {players: games[obj.gameName].players});
                 startResultsTimer(10, obj.gameName);
