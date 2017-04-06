@@ -252,7 +252,7 @@ io.sockets.on('connection', function(socket)
             if (games[obj.gameName].questionsPlayed == games[obj.gameName].numQPR)
             {
                 //stop timer
-                stopTimer(gameName);
+                stopTimer(obj.gameName);
                 //show round results
                 io.in(obj.gameName).emit('roundResults', 
                 {
