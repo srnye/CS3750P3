@@ -67,7 +67,7 @@ window.onload = function()
         var userFlag = false;
         for (var i = 0; i < activeGames[gameName.value].players.length; i++)
         {
-            if (activeGames[gameName.value].players[i] == userName.value)
+            if (activeGames[gameName.value].players[i].name == userName.value)
             {
                 userFlag = true;
             }

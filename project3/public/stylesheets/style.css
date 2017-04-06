@@ -9,18 +9,85 @@ a {
   color: #00B7FF;
 }
 
+copyright {
+  color: #fff;
+}
+
 .jumbotron {
   text-align: center;
   background-image: url('images/blurred-background-31.jpg') !important;
   background-size: cover;
-
 }
 
-.panel {
-   padding-left:10px;
-   padding-bottom: 10px;
-   background-image: url('images/blurred-background-31.jpg') !important;
-   background-size: cover;
+
+/* default page content container */
+
+.content {
+  color: #000;
+  border: solid 1px #555;
+  background-image: url('images/blurred-background-31.jpg') !important;
+  background-size: cover;
+  padding: 30px;
+}
+
+.sub-content {
+  border: solid 1px #555;
+  max-width: 300px;
+  padding: 30px;
+}
+
+.center-div {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.content input, .content select, .content textarea {
+  max-width: 200px;
+}
+
+.content label {
+  display: block;
+}
+
+.content input[type=checkbox] {
+  margin-right: 10px;
+}
+
+table {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+table, tr, td {
+  border: solid 1px #555;
+}
+
+.cell {
+  text-align: left;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.edit-btn {
+  text-align: center;
+  display: block;
+  color: #aaa;
+  border: solid 1px #aaa;
+  background: #111;
+  width: 100%;
+  min-width: 80px;
+}
+
+.edit-btn:hover {
+  color: #fff;
+  border: solid 1px #fff;
+  text-decoration: none;
+}
+
+
+
+#newGame {
+  text-align: left;
 }
 
 #joinGame {
@@ -36,6 +103,4 @@ a {
   width: 35%;
 }
 
-#addQuestionDropDown {
-  width: 25%;
-}
+ 
