@@ -12,7 +12,7 @@ block content
 
   //initial waiting lobby
   #waitingDiv.container
-    .panel
+    .content
       h1 <strong>Game Name: #{gameName}
       h4 Expected Players: #{numPlayers}
       p The game will start when all players join.
@@ -35,9 +35,9 @@ block content
       .rect3
       .rect4
       .rect5
-    .panel
-    h1(align='center') Host is picking question...
-    #timer
+    .content
+      h1(align='center') Host is picking question...
+      #timer
 
   #waitingAnswerLoader(style='display: none;')
     .spinner
@@ -46,7 +46,7 @@ block content
       .rect3
       .rect4
       .rect5
-    .panel
+    .content
       h1(align='center') Waiting on other users to submit answers...
 
   #waitingGuessesLoader(style='display: none;')
@@ -56,11 +56,11 @@ block content
       .rect3
       .rect4
       .rect5
-    .panel
+    .content
       h1(align='center') Waiting on other users to guess correct answer...
 
   #hostDiv(style='display: none;')
-    .panel
+    .content
       h3 Choose a category from the categories below:
       #catDiv
       #hostQDiv
@@ -68,7 +68,7 @@ block content
 
 
   #writeAnswerDiv(style='display: none;')
-    .panel
+    .content
       h2 Question:
       h3#questionHeader
       #warningMsg.alert.alert-warning(style='display: none;')
@@ -80,44 +80,48 @@ block content
 
 
   #guessAnswerDiv(style='display: none;')
-    h2 Question:
-    h3#answerGuessHeader
-    p Guess which answer you think is correct:
-    #guessDiv
-    #timerGuessAnswer
+    .content
+      h2 Question:
+      h3#answerGuessHeader
+      p Guess which answer you think is correct:
+      #guessDiv
+      #timerGuessAnswer
 
   #questionResultsDiv(style='display: none;')
-    h2 Question Results:
-    table#questionResultsTable.table.table-striped
-      thead
-        tr
-          th Rank
-          th Player Name
-          th Current Score
-      tbody
-    #questionResultsTimer
+    .content
+      h2 Question Results:
+      table#questionResultsTable.table.table-striped
+        thead
+          tr
+            th Rank
+            th Player Name
+            th Current Score
+        tbody
+      #questionResultsTimer
 
   #roundResultsDiv(style='display: none;')
-    h2 Round Results:
-    table#roundResultsTable.table.table-striped
-      thead
-        tr
-          th Rank
-          th Player Name
-          th Round Score
-      tbody
-    button.btn.btn-primary(id='playAgainBtn') Vote to Play Another Round
-    |
-    button.btn.btn-primary(id='leaveGameBtn') Leave Game
-    #roundResultsTimer
+    .content
+      h2 Round Results:
+      table#roundResultsTable.table.table-striped
+        thead
+          tr
+            th Rank
+            th Player Name
+            th Round Score
+        tbody
+      button.btn.btn-primary(id='playAgainBtn') Vote to Play Another Round
+      |
+      button.btn.btn-primary(id='leaveGameBtn') Leave Game
+      #roundResultsTimer
 
   #gameOverDiv(style='display: none;')
-    h1 Game over
-    p#reasonP
-    h2 Winner:
-    h1#winnerHeader(align='center')
-    |
-    a.btn.btn-primary(href='/', align='center') Home
+    .content
+      h1 Game over
+      p#reasonP
+      h2 Winner:
+      h1#winnerHeader(align='center')
+      |
+      a.btn.btn-primary(href='/', align='center') Home
 
     
 
