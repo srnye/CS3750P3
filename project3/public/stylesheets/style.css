@@ -99,29 +99,4 @@ table, tr, td {
   width: 35%;
 }
 
-.nav-btn {
-  border: solid 1px #000;
-  background: #472bb8;
-  background-image: -webkit-linear-gradient(top, #6065c4, #472bb8);
-  background-image: -moz-linear-gradient(top, #6065c4, #472bb8);
-  background-image: -ms-linear-gradient(top, #6065c4, #472bb8);
-  background-image: -o-linear-gradient(top, #6065c4, #472bb8);
-  background-image: linear-gradient(to bottom, #6065c4, #472bb8);
-  font-family: Arial;
-  color: #ffffff;
-  font-size: 10px;
-  padding: 10px 20px 10px 20px;
-  text-decoration: none;
-}
-
-.nav-btn:hover {
-  border: solid 1px #000;
-  background: #5c63e0;
-  background-image: -webkit-linear-gradient(top, #5c63e0, #6d58d6);
-  background-image: -moz-linear-gradient(top, #5c63e0, #6d58d6);
-  background-image: -ms-linear-gradient(top, #5c63e0, #6d58d6);
-  background-image: -o-linear-gradient(top, #5c63e0, #6d58d6);
-  background-image: linear-gradient(to bottom, #5c63e0, #6d58d6);
-  color: #ffffff;
-  text-decoration: none;
-}
+ 
