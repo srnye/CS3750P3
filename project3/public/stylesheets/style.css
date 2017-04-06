@@ -19,17 +19,21 @@ a {
 /* default page content container */
 
 .content {
-  color: #fff;
+  color: #000;
   border: solid 1px #555;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-image: url('images/blurred-background-31.jpg') !important;
+  background-size: cover;
   padding: 30px;
 }
 
 .sub-content {
   border: solid 1px #555;
-  background-color: rgba(0, 0, 0, 0.9);
   max-width: 300px;
   padding: 30px;
+}
+
+hr {
+  border-color: #000;
 }
 
 .center-div {
@@ -56,7 +60,6 @@ table {
 
 table, tr, td {
   border: solid 1px #555;
-  background-color: #000;
 }
 
 .cell {
