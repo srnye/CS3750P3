@@ -1,19 +1,18 @@
 extends layout
 
 block content
-  .container
-    .panel
-      h1 <strong> #{title}
-      table(class='table table-striped')
+  .container.content
+    .center-div
+      h1 #{title}
+      table
         tr
           th Question
           th Answer
           th
         each question, i in questions
           tr
-            td #{question.question}
-            td #{question.answer}
+            td.cell #{question.question}
+            td.cell #{question.answer}
             td
-              a(class="btn btn-tiny btn-default" href='/manage/questions/edit/'+question._id) Edit
-      br        
+              a(class='edit-btn' href='/manage/questions/edit/'+question._id) Edit
       a.btn.btn-primary(href='/manage/questions/add') Add Question
