@@ -1,19 +1,108 @@
 extends layout
 
 block content
+  
   .container
     .panel
-      h1 <strong> #{title}
-      table(class='table table-striped')
-        tr
-          th Question
-          th Answer
-          th
-        each question, i in questions
-          tr
-            td #{question.question}
-            td #{question.answer}
-            td
-              a(class="btn btn-tiny btn-default" href='/manage/questions/edit/'+question._id) Edit
-      br        
+      a.btn.btn-primary.pull-right(href='/') Home
+      h1 #{title}    
+      // definitions questions
+      div(id="parent")
+        div(id='definitions')
+          if (dCat > 0)
+            label Definitions
+            button(class="btn btn-tiny pull-right" onClick='hideCategories("definitions")') Hide Definitions
+            table(class='table table-striped')
+              tr
+                th Question
+                th Answer
+                th
+              each question, i in questions
+                if (question.category == 'Definitions')
+                  tr
+                    td #{question.question}
+                    td #{question.answer}
+                    td
+                      a(class="btn btn-tiny btn-default pull-right" href='/manage/questions/edit/'+question._id) Edit
+          
+          // famous people questions
+        div(id="famouspeople")
+          if (fCat > 0)
+            label Famous People
+            button(class="btn btn-tiny pull-right" onClick='hideCategories("famouspeople")') Hide Famous People
+            table(class='table table-striped')
+              tr
+                th Question
+                th Answer
+                th
+              each question, i in questions
+                if (question.category == 'Famous People')
+                  tr
+                    td #{question.question}
+                    td #{question.answer}
+                    td
+                      a(class="btn btn-tiny btn-default pull-right" href='/manage/questions/edit/'+question._id) Edit
+
+        // acronyms questions
+        div(id="acronyms")
+          if (aCat > 0)
+            label Acronyms
+            button(class="btn btn-tiny pull-right" onClick='hideCategories("acronyms")') Hide Acronyms
+            table(class='table table-striped')
+              tr
+                th Question
+                th Answer
+                th
+              each question, i in questions
+                if (question.category == 'Acronyms')
+                  tr
+                    td #{question.question}
+                    td #{question.answer}
+                    td
+                      a(class="btn btn-tiny btn-default pull-right" href='/manage/questions/edit/'+question._id) Edit
+          
+        // movie headlines questions
+        div(id="movieheadlines")
+          if (mCat > 0)
+            label Movie Headlines
+            button(class="btn btn-tiny pull-right" onClick='hideCategories("movieheadlines")') Hide Movie Headlines
+            table(class='table table-striped')
+              tr
+                th Question
+                th Answer
+                th
+              each question, i in questions
+                if (question.category == 'Movie Headlines')
+                  tr
+                    td #{question.question}
+                    td #{question.answer}
+                    td
+                      a(class="btn btn-tiny btn-default pull-right" href='/manage/questions/edit/'+question._id) Edit
+        
+        // Ludicrous Laws questions
+        div(id="ludicrouslaws")
+          if (lCat > 0)
+            label Ludicrous Laws
+            button(class="btn btn-tiny pull-right" onClick='hideCategories("ludicrouslaws")') Hide Ludicrous Laws
+            table(class='table table-striped')
+              tr
+                th Question
+                th Answer
+                th
+              each question, i in questions
+                if (question.category == 'Ludicrous Laws')
+                  tr
+                    td #{question.question}
+                    td #{question.answer}
+                    td
+                      a(class="btn btn-tiny btn-default pull-right" href='/manage/questions/edit/'+question._id) Edit
+
       a.btn.btn-primary(href='/manage/questions/add') Add Question
+
+
+  script.
+    function hideCategories(cat){
+      var parent = document.getElementById("parent");
+      var child = document.getElementById(cat);
+      parent.removeChild(child);
+    }
