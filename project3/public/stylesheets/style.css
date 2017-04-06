@@ -9,6 +9,10 @@ a {
   color: #00B7FF;
 }
 
+copyright {
+  color: #fff;
+}
+
 .jumbotron {
   text-align: center;
   background-image: url('images/blurred-background-31.jpg') !important;
