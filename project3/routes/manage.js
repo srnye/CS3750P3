@@ -11,9 +11,36 @@ router.get('/questions', (req, res, next) => {
 
     console.log(questions);
 
+    var definitionsCat = 0;
+    var famousCat = 0;
+    var acronymsCat = 0;
+    var movieCat = 0;
+    var ludicrousCat = 0;
+    var a = "testString";
+
+    for (i = 0; i < questions.length; i++) { 
+      if(questions[i].category == "Definitions"){
+        definitionsCat++;
+      }else if(questions[i].category == "Famous People"){
+        famousCat++;
+      }else if(questions[i].category == "Acronyms"){
+        acronymsCat++;
+      }else if(questions[i].category == "Movie Headlines"){
+        movieCat++;
+      }else if(questions[i].category == "Ludicrous Laws"){
+        ludicrousCat++;
+      }
+    }
+
     res.render('manage_questions', {
       title:'Questions',
-      questions: questions
+      questions: questions,
+      
+      dCat : definitionsCat,
+      fCat : famousCat,
+      aCat : acronymsCat,
+      mCat : movieCat,
+      lCat : ludicrousCat
     });
   });
 });

@@ -3,10 +3,7 @@ const router = express.Router();
 
 Question = require('../models/Question.js');
 
-//categories
-//var cars = ["Movies", "People", "Dates", "Words", "Laws"];
-
-//GET CATEGORIES 
+//get categories
 router.get('/', (req, res, next) => {
   Question.getQuestions((err, questions) => {
     if(err){
@@ -22,7 +19,7 @@ router.get('/', (req, res, next) => {
   });
 });
 
-//ADD CATEGORIES POST
+//post categories
 router.post('/edit/:id', (req, res, next) => {
   let question = new Question();
   const query = {_id: [req.params.id]}
@@ -36,10 +33,9 @@ router.post('/edit/:id', (req, res, next) => {
   });
 });
 
-// edit question - POST
+// add question post
 router.post('/add', (req, res, next) => {
   let question = new Question();
-  //category.cat = req.body.cat;
   question.question = req.body.question;
   question.answer = req.body.answer;
   question.category = req.body.category;
