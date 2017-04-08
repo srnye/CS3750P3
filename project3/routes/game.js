@@ -67,6 +67,7 @@ router.get('/playersVotes', function(req, res) {
 
 // Process New Game
 router.post('/newgame', (req, res, next) => {
+
     const gname = req.body.gname;
     const numplayers = req.body.numplayers;
     const numqpr = req.body.numqpr;
@@ -84,9 +85,16 @@ router.post('/newgame', (req, res, next) => {
         });
     } else {
 
-     //TODO: check if game name is null and create generated name if so
-
+     //check if game name is null and create generated name if so
+     if (gname == "")
+    {
+      gameName = Math.random().toString(36).substr(2, 5);
+    }
+    else
+    {
       gameName = gname;
+    }
+
       numPlayers = numplayers;
       numQPR = numqpr;
       cats = categories;

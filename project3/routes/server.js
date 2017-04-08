@@ -33,6 +33,7 @@ io.sockets.on('connection', function(socket)
     socket.on('join', function(obj) 
     {
         socket.join(obj.gameName);
+
         // determine if joining room or creating room
         if (obj.isNewGame == "true")
         {
