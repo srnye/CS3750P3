@@ -156,7 +156,8 @@ io.sockets.on('connection', function(socket)
         //update game information
         var rightAnswer = {player: "", answer: games[obj.gameName].currentQuestion.answer.toUpperCase()};
         var answer = {player: obj.playerName, answer: obj.answer.toUpperCase()};
-        
+        var answerCheck = games[obj.gameName].numPlayers;
+
         //resolve duplicate answers. doesn't tell us to do this in requirements
         // for (var a in games[obj.gameName].answers)
         // {
@@ -167,7 +168,7 @@ io.sockets.on('connection', function(socket)
         // }
 
         //award point to player but do not push if they guessed the answer
-        if(rightAnswer == answer)
+        if(rightAnswer.answer == answer.answer)
         {
             //find index of play 
             var index = 0;
@@ -180,7 +181,7 @@ io.sockets.on('connection', function(socket)
                 }
             }
             games[obj.gameName].players[p].score += games[obj.gameName].numPlayers + 1;
-            
+            answerCheck--;
         }
         else
         {
@@ -189,7 +190,7 @@ io.sockets.on('connection', function(socket)
         }
         //check to see if all players submitted answers
         //if yes, send to guessing div
-        if (games[obj.gameName].answers.length == games[obj.gameName].numPlayers)
+        if (games[obj.gameName].answers.length == answerCheck)
         {
             stopTimer(obj.gameName);
             startGuessAnswerTimer(30 ,obj.gameName)
