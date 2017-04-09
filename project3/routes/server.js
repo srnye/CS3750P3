@@ -21,10 +21,16 @@ io.sockets.on('connection', function(socket)
             {
                 //TODO: threw exception when host disconnected, value of player[p] is undefined
                 //should this be games[g].players[p].socketID != socket.id
-                if (games[g].players[p].socketID == socket.id)
-                {
-                    endGame(g, "Someone left the game.");
-                }
+               try
+               {
+                    if (games[g].players[parseInt(p)].socketID == socket.id)
+                    {
+                        endGame(g, "Someone left the game.");
+                    }
+               }catch(err)
+               {
+                    //do nothing
+               }
             }
         }
     });
