@@ -124,7 +124,15 @@ block content
       |
       a.btn.btn-primary(href='/', align='center') Home
 
-    
+  #gameExistsDiv(style='display: none;')
+    .content
+      h1 Error: Game Exists
+      p Create a game with a different name or join an existing game
+      |
+      a.btn.btn-primary(href='/game/joingame', align='center') Join Game
+      |
+      a.btn.btn-primary(href='/game/newgame', align='center') Create New Game
+
 
   block scripts
     script(src='../js/main.js', type='text/javascript')

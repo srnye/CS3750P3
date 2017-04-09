@@ -64,6 +64,9 @@ window.onload = function()
     var winnerHeader = document.getElementById("winnerHeader");
     var reasonP = document.getElementById("reasonP");
 
+    //GAME EXISTS DIV
+    var gameExistsDiv = document.getElementById("gameExistsDiv");
+
     socket.emit('join', 
     { 
         gameName: gameName.value,
@@ -382,6 +385,17 @@ window.onload = function()
         reasonP.innerHTML = "<strong>Reason:</strong> " + data.message;
     });
 
+    socket.on('redirectUser', function()
+    {
+        window.location.replace("/game/joingame");
+    });
+
+    socket.on('gameExists', function()
+    {
+        hideAllDivs();
+        gameExistsDiv.style.display = 'block';
+    });
+
     
 function timerStart(countdown) 
 {
@@ -455,6 +469,7 @@ function hideAllDivs()
     guessAnswerDiv.style.display = 'none';
     questionResultsDiv.style.display = 'none';
     gameOverDiv.style.display = 'none';
+    gameExistsDiv.style.display = 'none';
 }
 
 }; //end on load

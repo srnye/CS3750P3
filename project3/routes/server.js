@@ -38,76 +38,91 @@ io.sockets.on('connection', function(socket)
     //user joins or creates game
     socket.on('join', function(obj) 
     {
-        socket.join(obj.gameName);
-
-        // determine if joining room or creating room
-        if (obj.isNewGame == "true")
+        if (obj.gameName != ""  && obj.playerName != "")
         {
-            var game = 
-            {
-                gameName: obj.gameName,
-                numPlayers: obj.numPlayers,
-                numQPR: obj.numQPR,
-                questionsPlayed: 0,
-                categories: obj.categories,
-                players: [],
-                currentHost: {},
-                currentQuestion: {},
-                roundsPlayed: 0,
-                questions: obj.questions,
-                gameInterval: 0,
-                answers: [],
-                answerCheck: 0,
-                playersReady: []
-            };
+            socket.join(obj.gameName);
 
-            var player = 
+            // determine if joining room or creating room
+            if (obj.isNewGame == "true")
             {
-                name: obj.playerName, 
-                score: 0, 
-                socketID: socket.id
-            };
-            game.players.push(player);
-            games[obj.gameName] = game;
-        }
-        else
-        {
-            for (var key in games)
-            {
-                if(obj.gameName == key)
+                var game = 
                 {
-                    var game = games[key];
-                    var player = {name: obj.playerName, score: 0, socketID: socket.id};
+                    gameName: obj.gameName,
+                    numPlayers: obj.numPlayers,
+                    numQPR: obj.numQPR,
+                    questionsPlayed: 0,
+                    categories: obj.categories,
+                    players: [],
+                    currentHost: {},
+                    currentQuestion: {},
+                    roundsPlayed: 0,
+                    questions: obj.questions,
+                    gameInterval: 0,
+                    answers: [],
+                    answerCheck: 0,
+                    playersReady: []
+                };
+
+                var player = 
+                {
+                    name: obj.playerName, 
+                    score: 0, 
+                    socketID: socket.id
+                };
+
+                if (games[obj.gameName] != undefined)
+                {
+                    socket.emit('gameExists');
+                }
+                else
+                {
                     game.players.push(player);
+                    games[obj.gameName] = game;
                 }
             }
+            else
+            {
+                for (var key in games)
+                {
+                    if(obj.gameName == key)
+                    {
+                        var game = games[key];
+                        var player = {name: obj.playerName, score: 0, socketID: socket.id};
+                        game.players.push(player);
+                    }
+                }
+            }
+            if (io.sockets.adapter.sids[socket.id][obj.gameName] == true)
+            {
+                console.log("Youre in room: " + obj.gameName);
+            }
+            //send back player join information
+            //check if all players have joined
+            if (games[obj.gameName].players.length == games[obj.gameName].numPlayers)
+            {
+                //get questions from db based on categories and store in array
+                games[obj.gameName].questions = createQuestions(obj.categories, obj.questions);
+                
+                //start round
+                beginRound(obj.gameName);
+            }
+            //if not, update waiting lobby
+            else
+            {
+                var playerArr = [];
+                for(var p in games[obj.gameName].players)
+                {
+                    playerArr.push(games[obj.gameName].players[p].name);
+                }
+                io.in(obj.gameName).emit('playerJoined', 
+                {
+                    players: playerArr
+                });
+            }
         }
-        if (io.sockets.adapter.sids[socket.id][obj.gameName] == true)
-        {
-            console.log("Youre in room: " + obj.gameName);
-        }
-        //send back player join information
-        //check if all players have joined
-        if (games[obj.gameName].players.length == games[obj.gameName].numPlayers)
-        {
-            //get questions from db based on categories and store in array
-            games[obj.gameName].questions = createQuestions(obj.categories, obj.questions);
-            
-            //start round
-            beginRound(obj.gameName);
-        }
-        //if not, update waiting lobby
         else
         {
-            var playerArr = [];
-            for(var p in games[obj.gameName].players)
-            {
-                playerArr.push(games[obj.gameName].players[p].name);
-            }
-            io.in(obj.gameName).emit('playerJoined', 
-            {
-                players: playerArr
-            });
+            socket.emit('redirectUser');
         }
     });
 
@@ -403,6 +418,8 @@ io.sockets.on('connection', function(socket)
                 games[gameName].questions.splice(0,1);
                 //emit question to all players (including host) in answer div
                 io.in(gameName).emit('writeAnswer', {question: games[gameName].currentQuestion.question});
+                //start timer
+                startWriteAnswerTimer(30 ,gameName);
             }
         }, 1000);
     }

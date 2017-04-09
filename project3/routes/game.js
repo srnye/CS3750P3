@@ -39,7 +39,10 @@ router.get('/', function(req, res){
     categories: cats,
     isNewGame: isNewGame,
     questions: questions
-    });
+  });
+  
+  //reset vars
+  resetVars();
   
   });
 
@@ -86,7 +89,7 @@ router.post('/newgame', (req, res, next) => {
     } else {
 
      //check if game name is null and create generated name if so
-     if (gname == "")
+    if (gname == "")
     {
       gameName = Math.random().toString(36).substr(2, 5);
     }
@@ -131,5 +134,16 @@ router.post('/joingame', (req, res, next) =>
     res.redirect('/game'); //redirect to game
   }
 });
+
+function resetVars()
+{
+  gameName = null;
+  numPlayers = null;
+  numQPR = null; //number of questions per round
+  playerName = null;
+  cats = null;
+  isNewGame = "false";
+  questions = [];
+}
 
 module.exports = router;
