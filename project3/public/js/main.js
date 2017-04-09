@@ -306,7 +306,7 @@ window.onload = function()
 
         while (roundResultsTable.rows.length > 1)
         {
-            roundResultsTable.removeChild(1);
+            roundResultsTable.deleteRow(1);
         }
 
         //sort array on score
