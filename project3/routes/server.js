@@ -157,7 +157,7 @@ io.sockets.on('connection', function(socket)
         //update game information
         var rightAnswer = {player: "", answer: games[obj.gameName].currentQuestion.answer.toUpperCase()};
         var answer = {player: obj.playerName, answer: obj.answer.toUpperCase()};
-        var answerCheck = 0;
+        var answerCheck = games[obj.gameName].answers.length;
 
         //resolve duplicate answers. doesn't tell us to do this in requirements
         // for (var a in games[obj.gameName].answers)
@@ -182,13 +182,12 @@ io.sockets.on('connection', function(socket)
                 }
             }
             games[obj.gameName].players[p].score += games[obj.gameName].numPlayers + 1;
-            answerCheck++;
+            answerCheck--;
         }
         else
         {
             //pushing player answer into answer array
             games[obj.gameName].answers.push(answer);
-            answerCheck++;
         }
         //check to see if all players submitted answers
         //if yes, send to guessing div
