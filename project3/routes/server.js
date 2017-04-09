@@ -51,6 +51,7 @@ io.sockets.on('connection', function(socket)
                 questions: obj.questions,
                 gameInterval: 0,
                 answers: [],
+                answerCheck: 0,
                 playersReady: []
             };
 
@@ -131,6 +132,9 @@ io.sockets.on('connection', function(socket)
 
     socket.on('questionChosen', function(obj)
     {
+        // reset answer check
+        games[obj.gameName].answerCheck = games[obj.gameName].numPlayers;;
+        // stop timer
         stopTimer(obj.gameName);
         //find index of question to remove
         var index = 0;
@@ -157,7 +161,6 @@ io.sockets.on('connection', function(socket)
         //update game information
         var rightAnswer = {player: "", answer: games[obj.gameName].currentQuestion.answer.toUpperCase()};
         var answer = {player: obj.playerName, answer: obj.answer.toUpperCase()};
-        var answerCheck = games[obj.gameName].answers.length;
 
         //resolve duplicate answers. doesn't tell us to do this in requirements
         // for (var a in games[obj.gameName].answers)
@@ -182,7 +185,7 @@ io.sockets.on('connection', function(socket)
                 }
             }
             games[obj.gameName].players[p].score += games[obj.gameName].numPlayers + 1;
-            answerCheck--;
+            games[obj.gameName].answerCheck--;
         }
         else
         {
@@ -191,7 +194,7 @@ io.sockets.on('connection', function(socket)
         }
         //check to see if all players submitted answers
         //if yes, send to guessing div
-        if (games[obj.gameName].answers.length == answerCheck)
+        if (parseInt(games[obj.gameName].answers.length) == parseInt(games[obj.gameName].answerCheck))
         {
             stopTimer(obj.gameName);
             startGuessAnswerTimer(30 ,obj.gameName)
