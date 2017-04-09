@@ -45,7 +45,7 @@ io.sockets.on('connection', function(socket)
         {
             var game = 
             {
-                //gameName: obj.gameName,
+                gameName: obj.gameName,
                 numPlayers: obj.numPlayers,
                 numQPR: obj.numQPR,
                 questionsPlayed: 0,
@@ -114,7 +114,17 @@ io.sockets.on('connection', function(socket)
     socket.on('getActiveGames', (callback) =>
     {
         console.log("received emit on server");
-        io.to(socket.id).emit('activeGames', games); 
+        var activeGames = [];
+        for (var g in games)
+        {
+        var tempGame = {gameName: games[g].gameName, players: [], numPlayers: games[g].numPlayers, numQPR : games[g].numQPR, categories : games[g].categories, questions : games[g].questions};
+            for (var p in games[g].players)
+            {
+                tempGame.players.push(games[g].players[p]);
+            }
+            activeGames.push(tempGame);
+        }
+        io.to(socket.id).emit('activeGames', activeGames); 
     });
 
     socket.on('categoryChanged', function(obj)

@@ -13,7 +13,8 @@ window.onload = function()
     var categories = document.getElementById("categories");
     var questions = document.getElementById("questions");
 
-    var activeGames = {};
+    var activeGames = [];
+    var gameIndex = 0;
 
     warningMsg.style.display = 'none';
 
@@ -52,9 +53,10 @@ window.onload = function()
         var roomFlag = false;
         for (var r in activeGames)
         {
-            if (r == gameName.value)
+            if (activeGames[r].gameName == gameName.value)
             {
                 roomFlag = true;
+                gameIndex = r;
             }
         }
         if (roomFlag != true)
@@ -65,9 +67,9 @@ window.onload = function()
         }
         //check to see if user exists
         var userFlag = false;
-        for (var i = 0; i < activeGames[gameName.value].players.length; i++)
+        for (var i = 0; i < activeGames[gameIndex].players.length; i++)
         {
-            if (activeGames[gameName.value].players[i].name == userName.value)
+            if (activeGames[gameIndex].players[i].name == userName.value)
             {
                 userFlag = true;
             }
@@ -79,16 +81,16 @@ window.onload = function()
             return;
         }
         //check to see if room is full
-        if (activeGames[gameName.value].players.length == activeGames[gameName.value].numPlayers)
+        if (activeGames[gameIndex].players.length == activeGames[gameIndex].numPlayers)
         {
             warningMsg.style.display = 'block';
             warningMsg.innerHTML = "<strong>Room is full!</strong>";
             return;
         }
-        numPlayers.value = activeGames[gameName.value].numPlayers;
-        numQPR.value = activeGames[gameName.value].numQPR;
-        categories.value = activeGames[gameName.value].categories;
-        questions.value = activeGames[gameName.value].questions;
+        numPlayers.value = activeGames[gameIndex].numPlayers;
+        numQPR.value = activeGames[gameIndex].numQPR;
+        categories.value = activeGames[gameIndex].categories;
+        questions.value = activeGames[gameIndex].questions;
         joinForm.submit();
     };
 
