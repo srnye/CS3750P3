@@ -19,6 +19,7 @@ window.onload = function()
     var waitingAnswerLoader = document.getElementById("waitingAnswerLoader");
     var waitingGuessesLoader = document.getElementById("waitingGuessesLoader");
     var timer = document.getElementById("timer");
+    var gameNameHeader = document.getElementById("gameNameHeader");
 
     //TIMER INTERVALS
     var hostInterval;
@@ -66,6 +67,7 @@ window.onload = function()
 
     //GAME EXISTS DIV
     var gameExistsDiv = document.getElementById("gameExistsDiv");
+    var autoButton = document.getElementById("autoButton");
 
     socket.emit('join', 
     { 
@@ -393,7 +395,28 @@ window.onload = function()
     socket.on('gameExists', function()
     {
         hideAllDivs();
+        var genName = Math.random().toString(36).substr(2, 5);
         gameExistsDiv.style.display = 'block';
+
+        autoButton.innerHTML = "Create game " + genName;
+
+        autoButton.onclick = function()
+        {
+            socket.emit('join', 
+            { 
+                gameName: genName,
+                numPlayers: parseInt(numPlayers.value),
+                numQPR: parseInt(numQPR.value),
+                playerName: playerName.value,
+                categories: categories.value,
+                isNewGame: isNewGame.value,
+                questions: questions.value
+            });
+            gameName.value = genName;
+            gameNameHeader.innerHTML = "<strong>Game Name: " + genName + "</strong>";
+            gameExistsDiv.style.display = 'none';
+            waitingDiv.style.display = 'block';
+        }
     });
 
     

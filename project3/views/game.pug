@@ -13,7 +13,7 @@ block content
   //initial waiting lobby
   #waitingDiv.container
     .content
-      h1 <strong>Game Name: #{gameName}
+      h1#gameNameHeader <strong>Game Name: #{gameName}
       h4 Expected Players: #{numPlayers}
       p The game will start when all players join.
       table#waitingTable.table
@@ -127,6 +127,11 @@ block content
   #gameExistsDiv(style='display: none;')
     .content
       h1 Error: Game Exists
+      p Create game with auto-generated name
+      a#autoButton.btn.btn-primary(align='center')
+      |
+      h2 OR
+      |
       p Create a game with a different name or join an existing game
       |
       a.btn.btn-primary(href='/game/joingame', align='center') Join Game

@@ -40,8 +40,6 @@ io.sockets.on('connection', function(socket)
     {
         if (obj.gameName != ""  && obj.playerName != "")
         {
-            socket.join(obj.gameName);
-
             // determine if joining room or creating room
             if (obj.isNewGame == "true")
             {
@@ -76,12 +74,14 @@ io.sockets.on('connection', function(socket)
                 }
                 else
                 {
+                    socket.join(obj.gameName);
                     game.players.push(player);
                     games[obj.gameName] = game;
                 }
             }
             else
             {
+                socket.join(obj.gameName);
                 for (var key in games)
                 {
                     if(obj.gameName == key)
